@@ -1,0 +1,11 @@
+MAKE SURE TO PUSH TO THE MASTER BRANCH!
+
+1. Make the changes in the repo directory and/or .py files
+2. In VS, press "View" and then "Git Changes"
+3. Enter in a description for what you changed/added (there should be a small preview below
+the description area saying "Changes" and then the actual changes
+4. Press "Commit All". It should then say "Commit (#) created locally".
+5. Go to "Git" and then "Push" to Push the Changes to the repo
+6. To confirm the push, press "View" and then "Git Repository". Your latest push w/ description
+should be at the top
+7. If it is not, press the "Push" button next to "Local History" and then it should appear.
