@@ -1,3 +1,5 @@
+#contains all the commands to create the database and tables for the LeopardWeb_Project
+
 import sqlite3
 
 database = sqlite3.connect("LeopardWeb_Project.db")
@@ -55,8 +57,8 @@ sql_command = """CREATE TABLE IF NOT EXISTS COURSE (
 
 cursor.execute(sql_command)
 
-# USER Table (for GUI)
-sql_command = """CREATE TABLE IF NOT EXISTS USER (
+# LOGIN Table (for GUI)
+sql_command = """CREATE TABLE IF NOT EXISTS LOGIN (
     fNAME TEXT NOT NULL,
     lNAME TEXT NOT NULL,
     USERNAME TEXT NOT NULL,
