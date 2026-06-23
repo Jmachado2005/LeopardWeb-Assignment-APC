@@ -1,7 +1,14 @@
 # this is the .py file that will contain all the code for the classes and objects of the LeopardWeb project
 # Written by Harrison Brown
 
-import sqlite3 
+import re
+import sqlite3
+import tkinter
+from tkinter import *
+from tkinter.ttk import * 
+from tkinter import ttk
+from turtle import reset
+
 
 conn = sqlite3.connect("LeopardWeb_Project.db")
 cursor = conn.cursor()
