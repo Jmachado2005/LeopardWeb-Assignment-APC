@@ -1,7 +1,14 @@
 # this is the .py file that will contain all the code for the classes and objects of the LeopardWeb project
 # Written by Harrison Brown
 
-import sqlite3 
+import re
+import sqlite3
+import tkinter
+from tkinter import *
+from tkinter.ttk import * 
+from tkinter import ttk
+from turtle import reset
+
 
 conn = sqlite3.connect("LeopardWeb_Project.db")
 cursor = conn.cursor()
@@ -78,10 +85,57 @@ class Admin(User):
         self.office = office
 
     def add_course_system(self):
+        print ("add later")
 
     def add_student(self):
+        fName = input("Enter first name: ")
+        lName = input("Enter last name: ")
+        YoG = input("Enter year of graduation: ")
+        Major = input("Enter major: ")
+        Username = lName + fName[0]
+
+        cursor.execute("""SELECT COUNT FROM STUDENT WHERE SURNAME = Username;""")
+        querey_result = cursor.fetchall()
+
+        if querey_result > 0:
+            Username = Username + str(querey_result)
+
+        password = input("Enter password: ")
+
+        cursor.execute("""SELECT MAX(ID) FROM STUDENT;""")
+        maximum = cursor.fetch()
+
+        idNum = maximum + 1
+
+        sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(idNum, fName, lName, YoG, Major, Username + '@wit.edu');"""
+        cursor.execute(sql_command)
+        cursor.commit()
+
+
+        sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(idNum, Username, password, 1);"""
+        cursor.exectute(sql_command)
+        cursor.commit()
 
     def add_instructor(self):
+        fName = input("Enter first name: ")
+        lName = input("Enter last name: ")
+        YoG = input("Enter year of graduation: ")
+        Major = input("Enter major: ")
+        Username = lName + fName[0]
+
+        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE SURNAME = Username;""")
+        querey_result = cursor.fetchall()
+
+        if querey_result > 0:
+            Username = Username + str(querey_result)
+
+        password = input("Enter password: ")
+
+        sql_command = """INSERT OR IGNORE INTO INSTRUCTOR VALUES(20001, 'Bram', 'Gorbold', 'Dean of SoM', 2020, 'MGMT', 'gorboldb@wit.edu');"""
+        cursor.execute(sql_command)
+
+        sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(20001, 'gorboldb', 'Manag3mt4L1f3', 2);"""
+        cursor.exectute(sql_command)
 
     def link_instructor(self):
 
