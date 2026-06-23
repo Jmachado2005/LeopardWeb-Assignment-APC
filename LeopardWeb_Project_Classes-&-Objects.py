@@ -42,11 +42,11 @@ class User:
             admin_info = cursor.fetchone()
             user = Admin(admin_info[0], admin_info[1], admin_info[2], admin_info[3], admin_info[4], admin_info[5])
 
-
     def logout(self):
         print("logout");
     def course_search(self):
         print("course search");
+        
     def parameter_search(self):
         print("parameter search");
 
