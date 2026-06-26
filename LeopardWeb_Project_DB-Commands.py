@@ -13,7 +13,12 @@ sql_command = """CREATE TABLE IF NOT EXISTS STUDENT (
     SURNAME TEXT NOT NULL,
     GRADE_YEAR INTEGER NOT NULL,
     MAJOR TEXT NOT NULL,
-    EMAIL TEXT NOT NULL)
+    EMAIL TEXT NOT NULL,
+    COURSE_ONE INTEGER,
+    COURSE_TWO INTEGER,
+    COURSE_THREE INTEGER,
+    COURSE_FOUR INTEGER,
+    COURSE_FIVE INTEGER)
     ;"""
 
 cursor.execute(sql_command)
@@ -76,121 +81,121 @@ sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(30001, 'griffithsk', 'number
 cursor.execute(sql_command)
 
 # Adding 20 students into STUDENTS table and then add them to the LOGIN table
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10001, 'Burt', 'Chance', 2027, 'Applied Science', 'chanceb@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10001, 'Burt', 'Chance', 2027, 'Applied Science', 'chanceb@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10001, 'chanceb', 'BurtIsDaBest', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10002, 'Fannie', 'Nielson', 2028, 'Information Technology', 'nielsonf@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10002, 'Fannie', 'Nielson', 2028, 'Information Technology', 'nielsonf@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10002, 'nielsonf', 'AintThatPerculiar28', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10003, 'Maeve', 'Masters', 2029, 'Electromechanical Engineering', 'mastersm@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10003, 'Maeve', 'Masters', 2029, 'Electromechanical Engineering', 'mastersm@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10003, 'mastersm', 'MasterOfPuppets29', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10004, 'Jones', 'Cowden', 2029, 'Computer Science', 'cowdenj@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10004, 'Jones', 'Cowden', 2029, 'Computer Science', 'cowdenj@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10004, 'cowdenj', 'IndianaJones29?', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10005, 'Lloyd', 'Prestron', 2030, 'Mechanical Engineering', 'prestronl@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10005, 'Lloyd', 'Prestron', 2030, 'Mechanical Engineering', 'prestronl@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10005, 'prestonl', 'JC_Superstar30', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10006, 'Allan', 'Cornell', 2030, 'Industrial Design', 'cornella@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10006, 'Allan', 'Cornell', 2030, 'Industrial Design', 'cornella@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10006, 'cornella', 'C0rnellR3jectedM3?', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10007, 'Brigham', 'Rowland', 2030, 'Cybersecurity', 'rowlandb@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10007, 'Brigham', 'Rowland', 2030, 'Cybersecurity', 'rowlandb@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10007, 'rowlandb', 'R0wleyJ3fferson', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10008, 'Arthur', 'Courtenay', 2029, 'Computer Information Systems', 'courtenay@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10008, 'Arthur', 'Courtenay', 2029, 'Computer Information Systems', 'courtenay@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10008, 'courtenaya', 'K1ngArthur29', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10009, 'Gracelyn', 'Smythe', 2028, 'Architecture', 'smytheg@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10009, 'Gracelyn', 'Smythe', 2028, 'Architecture', 'smytheg@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10009, 'smytheg', 'P1x1eDr3amG1rl', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10010, 'Catherine', 'Sweet', 2030, 'Biomedical Engineering', 'sweetc@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10010, 'Catherine', 'Sweet', 2030, 'Biomedical Engineering', 'sweetc@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10010, 'sweetc', 'SugarCra5h30', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10011, 'Epiphany', 'Warren', 2026, 'Project Management', 'warrene@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10011, 'Epiphany', 'Warren', 2026, 'Project Management', 'warrene@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10011, 'warrene', 'Warr3nBuff3t26', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10012, 'Marvin', 'Henley', 2030 , 'Civil Engineering', 'henleym@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10012, 'Marvin', 'Henley', 2030 , 'Civil Engineering', 'henleym@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10012, 'henleym', 'B0ysOfSumm3r', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10013, 'Tad', 'Irvin', 2026 , 'Information Technology', 'irvint@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10013, 'Tad', 'Irvin', 2026 , 'Information Technology', 'irvint@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10013, 'irvint', 'TadB1tBr0k3', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10014, 'Roman', 'Wade', 2027, 'Climate Resilience', 'wader@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10014, 'Roman', 'Wade', 2027, 'Climate Resilience', 'wader@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10014, 'wader', 'N0tAWa1t3r', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10015, 'Jessye', 'Backus', 2029, 'Engineering', 'backusj@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10015, 'Jessye', 'Backus', 2029, 'Engineering', 'backusj@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10015, 'backusj', 'Walt3rWh1t3!', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10016, 'Pattie', 'Roberson', 2029, 'Computer Science & Society', 'robersonp@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10016, 'Pattie', 'Roberson', 2029, 'Computer Science & Society', 'robersonp@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10016, 'robersonp', 'R0b3r0n29', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10017, 'Jaeden', 'Toft', 2026, 'Biological Engineering', 'toftj@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10017, 'Jaeden', 'Toft', 2026, 'Biological Engineering', 'toftj@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10017, 'toftj', 'T0fuIsYucky26', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10018, 'Becky', 'Easton', 2028, 'Physics', 'eastonb@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10018, 'Becky', 'Easton', 2028, 'Physics', 'eastonb@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10018, 'eastonb', 'W3ston28', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10019, 'Baldric', 'Travers' , 2026, 'Applied Mathematics', 'traversb@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10019, 'Baldric', 'Travers' , 2026, 'Applied Mathematics', 'traversb@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10019, 'traversb', 'IProm1s3ImN0tBald', 1);"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10020, 'Sandie', 'Weaver', 2029 , 'Computer Engineering', 'weavers@wit.edu');"""
+sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10020, 'Sandie', 'Weaver', 2029 , 'Computer Engineering', 'weavers@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(10020, 'weavers', 'IL0veC0mpEng1neer1ng!', 1);"""
