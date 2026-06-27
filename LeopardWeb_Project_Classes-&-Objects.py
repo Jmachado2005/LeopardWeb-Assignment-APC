@@ -42,6 +42,8 @@ class User:
             admin_info = cursor.fetchone()
             user = Admin(admin_info[0], admin_info[1], admin_info[2], admin_info[3], admin_info[4], admin_info[5])
 
+        return user
+
     def logout(self):
         print("logout");
     def course_search(self):
@@ -72,10 +74,31 @@ class Instructor(User):
         self.course = course
 
     def print_teaching_schedule(self):
+        cursor.execute("""SELECT * FROM COURSES WHERE ID = ?""", (self.wit_ID));
+        for row in cursor:
+            print(row)
 
     def search_student(self):
+        cursor.execute("""SELECT * FROM COURSES WHERE ID = ?""", (self.wit_ID));
+        for row in cursor:
+            print(row)
+        course = input("Enter the CRN of the course whose roster you want to search: ")
+        cursor.execute("""SELECT ID FROM STUDENT WHERE COURSE_ONE = ? OR COURSE_TWO = ? OR COURSE_THREE = ? OR COURSE_FOUR = ? OR COURSE_FIVE = ?""", (course, course, course, course, course));
+        student = input("What is the ID of the student you are searching for: ")
+        for row in cursor:
+            if row == student:
+                print("This student is taking your course.")
+                return
+
+        print("This student is not taking your course.")
 
     def print_roster(self):
+        courseName = input("What is the name of the course whose roster you want to view: ")
+        cursor.execute("""SELECT CRN FROM COURSES WHERE NAME = ?""", (courseName));
+        courseCRN = cursor.fetchone()
+        cursor.execute("""SELECT * FROM STUDENT WHERE COURSE_ONE = ? OR COURSE_TWO = ? OR COURSE_THREE = ? OR COURSE_FOUR = ? OR COURSE_FIVE = ?""", (courseCRN, courseCRN, courseCRN, courseCRN, courseCRN));
+        for row in cursor:
+            print(row)
 
 
 class Admin(User):
