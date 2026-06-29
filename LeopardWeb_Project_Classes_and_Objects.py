@@ -261,27 +261,59 @@ class Instructor(User):
 
 
 class Admin(User):
+
     def __init__(self, wit_ID, first_name, last_name, title, office, email):
         super().__init__(first_name, last_name, wit_ID, email)
         self.title = title
         self.office = office
 
     def add_course_system(self):
-        print("Add Course to System")
-        print ("add later")
+        print ("add a course")
+        CRN = 1
+
+        while CRN == -1:
+            CRN = input("Enter CRN: ")
+
+            cursor.execute("""SELECT FROM COURSES WHERE CRN = ?;""", (CRN))
+            querey_result = cursor.fetchall()
+
+            if querey_result > 0 or CRN < 0 :
+                print ("CRN already exists or value is negative, please enter a new CRN")
+                CRN = -1
+
+
+        title = input("Enter course title: ")
+        dep = input("Enter department: ")
+        time = input("Enter time (range): ")
+        DoW = input("Enter days of week: ")
+        instID = input("Enter instructor ID (leave blank if unassigned): ")
+        semester = input("Enter semester: ")
+        year = input("Enter year: ")
+        creds = input("Enter credits: ")
+
+
+        sql_command = """INSERT OR IGNORE INTO COURSES VALUES(CRN = ?, TITLE = ?, DEPARTMENT = ?, TIME = ?, DAYS_OF_THE_WEEK = ?, INSTRUCTOR_ID = ?, SEMESTER = ?, YEAR = ?, CREDITS = ?);""", (CRN, title, dep, time, DoW, instID, semester, year, creds)
+        cursor.execute(sql_command)
+        cursor.commit()
+
+
+
+
+
 
     def add_student(self):
+        print ("add a student")
         fName = input("Enter first name: ")
         lName = input("Enter last name: ")
         YoG = input("Enter year of graduation: ")
         Major = input("Enter major: ")
-        Username = lName + fName[0]
+        Username = lName
 
-        cursor.execute("""SELECT COUNT FROM STUDENT WHERE SURNAME = Username;""")
+        cursor.execute("""SELECT COUNT FROM STUDENT WHERE SURNAME = ?;""", (Username))
         querey_result = cursor.fetchall()
 
         if querey_result > 0:
-            Username = Username + str(querey_result)
+            Username = Username + fName[0] + str(querey_result)
 
         password = input("Enter password: ")
 
@@ -290,23 +322,26 @@ class Admin(User):
 
         idNum = maximum + 1
 
-        sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(idNum, fName, lName, YoG, Major, Username + '@wit.edu');"""
+        email = Username + "@wit.edu"
+
+        sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(ID = ?, NAME = ?, SURNAME = ?, GRADE_YEAR = ?, MAJOR = ?, EMAIL = ?);""", (idNum, fName, lName, YoG, Major, email)
         cursor.execute(sql_command)
         cursor.commit()
 
 
-        sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(idNum, Username, password, 1);"""
+        sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(ID = ?, USERNAME = ?, PASSWORD = ?, 1);""" , (idNum, Username, password)
         cursor.exectute(sql_command)
         cursor.commit()
 
     def add_instructor(self):
         fName = input("Enter first name: ")
         lName = input("Enter last name: ")
-        YoG = input("Enter year of graduation: ")
-        Major = input("Enter major: ")
+        title = input("Enter title: ")
+        YoH = input("Enter year of hire: ")
+        dept = input("Enter department: ")
         Username = lName + fName[0]
 
-        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE SURNAME = Username;""")
+        cursor.execute("""SELECT COUNT FROM INSTRUCTOR WHERE SURNAME = ?;""", (lName))
         querey_result = cursor.fetchall()
 
         if querey_result > 0:
@@ -314,24 +349,119 @@ class Admin(User):
 
         password = input("Enter password: ")
 
-        sql_command = """INSERT OR IGNORE INTO INSTRUCTOR VALUES(20001, 'Bram', 'Gorbold', 'Dean of SoM', 2020, 'MGMT', 'gorboldb@wit.edu');"""
+
+        cursor.execute("""SELECT MAX(ID) FROM INSTRUCTOR;""")
+        maximum = cursor.fetch()
+
+        idNum = maximum + 1
+
+        email = Username + "@wit.edu"
+
+        sql_command = """INSERT OR IGNORE INTO INSTRUCTOR VALUES(ID = ?, NAME = ?, SURNAME = ?, TITLE = ?, HIRE_YEAR = ?, DEPT = ?, EMAIL = ?);""", (idNum, fName, lName, title, YoH, dept, email)
         cursor.execute(sql_command)
 
-        sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(20001, 'gorboldb', 'Manag3mt4L1f3', 2);"""
+        sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(ID = ?, USERNAME = ?, PASSWORD = ?, 2);""", (idNum, Username, password)
         cursor.exectute(sql_command)
+        cursor.commit()
 
     def link_instructor(self):
-        print("Link Instructor to Course")
-        print ("Not finished yet")
+        regNum = input("Enter CRN of course to link instructor to: ")
+        instID = input("Enter ID of instructor to link to course: ")
+        
+        cursor.execute()("""UPDATE COURSES SET INSTRUCTOR_ID = ? WHERE CRN = ?;""", (instID, regNum))
+        cursor.commit()
+
+
     def unlink_instructor(self):
-        print("Unlink Instructor from Course")
-        print ("Not finished yet")
+        regNum = input("Enter CRN of course to link instructor to: ")
+        cursor.execute()("""UPDATE COURSES SET INSTRUCTOR_ID = NULL WHERE CRN = ?""", (regNum))
+        cursor.commit
+        
+
     def add_student_course(self):
-        print("Add student to Course")
-        print ("Not finished yet")
+        studentID = input("Enter ID of student to add to course: ")
+        CRN = input("Enter CRN of course to add student to: ")
+
+        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_ONE = NULL;""", (studentID))
+        queryResult = cursor.fetchall()
+        if queryResult > 0:
+            cursor.execute()("""UPDATE STUDENT SET COURSE_ONE = ? WHERE ID = ?;""", (CRN, studentID))
+            cursor.commit()
+        else:
+            cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_TWO = NULL;""", (studentID))
+            queryResult = cursor.fetchall()
+            if queryResult > 0:
+                cursor.execute()("""UPDATE STUDENT SET COURSE_TWO = ? WHERE ID = ?;""", (CRN, studentID))
+                cursor.commit()
+            else:
+                cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_THREE = NULL;""", (studentID))
+                queryResult = cursor.fetchall()
+                if queryResult > 0:
+                    cursor.execute()("""UPDATE STUDENT SET COURSE_THREE = ? WHERE ID = ?;""", (CRN, studentID))
+                    cursor.commit()
+                else:
+                    cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_FOUR = NULL;""", (studentID))
+                    queryResult = cursor.fetchall()
+                    if queryResult > 0:
+                        cursor.execute()("""UPDATE STUDENT SET COURSE_FOUR = ? WHERE ID = ?;""", (CRN, studentID))
+                        cursor.commit()
+                    else:
+                        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_FIVE = NULL;""", (studentID))
+                        queryResult = cursor.fetchall()
+                        if queryResult > 0:
+                            cursor.execute()("""UPDATE STUDENT SET COURSE_FIVE = ? WHERE ID = ?;""", (CRN, studentID))
+                            cursor.commit()
+                        else:
+                            print("Student is already enrolled in 5 courses. Cannot add more courses.")
+            
+
+
     def remove_student_course(self):
-        print("Remove student from Course")
-        print ("Not finished yet")
+        CRN = input("Enter CRN of course to remove student from: ")
+        studentID = input("Enter ID of student to remove from course: ")
+
+        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_ONE = ?;""", (studentID, CRN))
+        querryResult = cursor.fetchall()
+
+        if querryResult > 0:
+            cursor.execute()("""UPDATE FROM STUDENT COURSE_ONE = NULL WHERE ID = ? AND WHERE COURSE_ONE = ?;""", (studentID, CRN))
+            cursor.commit()
+
+
+
+        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_TWO = ?;""", (studentID, CRN))
+        querryResult = cursor.fetchall()
+
+        if querryResult > 0:
+            cursor.execute()("""UPDATE FROM STUDENT COURSE_TWO = NULL WHERE ID = ? AND WHERE COURSE_TWO = ?;""", (studentID, CRN))
+            cursor.commit()
+
+
+
+        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_THREE = ?;""", (studentID, CRN))
+        querryResult = cursor.fetchall()
+
+        if querryResult > 0:
+            cursor.execute()("""UPDATE FROM STUDENT COURSE_THREE = NULL WHERE ID = ? AND WHERE COURSE_THREE = ?;""", (studentID, CRN))
+            cursor.commit()
+
+
+
+        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_FOUR = ?;""", (studentID, CRN))
+        querryResult = cursor.fetchall()
+
+        if querryResult > 0:
+            cursor.execute()("""UPDATE FROM STUDENT COURSE_FOUR = NULL WHERE ID = ? AND WHERE COURSE_FOUR = ?;""", (studentID, CRN))
+            cursor.commit()
+
+
+
+        cursor.execute()("""SELECT COUNT FROM STUDENT WHERE ID = ? AND WHERE COURSE_FIVE = ?;""", (studentID, CRN))
+        querryResult = cursor.fetchall()
+
+        if querryResult > 0:
+            cursor.execute()("""UPDATE FROM STUDENT COURSE_FIVE = NULL WHERE ID = ? AND WHERE COURSE_FIVE = ?;""", (studentID, CRN))
+            cursor.commit()
 
 class Course:
     def __init__(self, CRN, title, department, time, days_of_week, semester, year, credit):
