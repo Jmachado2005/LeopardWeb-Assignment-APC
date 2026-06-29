@@ -226,12 +226,11 @@ class Student(User):
 
 
 class Instructor(User):
-    def __init__(self, wit_ID, first_name, last_name, title, hire_year, department, email, course):
+    def __init__(self, wit_ID, first_name, last_name, title, hire_year, department, email):
         super().__init__(first_name, last_name, wit_ID, email)
         self.title = title
         self.hire_year = hire_year
         self.department = department
-        self.course = course
 
     def print_teaching_schedule(self):
         cursor.execute("""SELECT * FROM COURSES WHERE ID = ?""", (self.wit_ID));

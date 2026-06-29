@@ -23,7 +23,7 @@ exit = 0    # variable used to exit loop when the user wants to logout
 systemUser = login()
 
 print("*** User Using System: ***")
-print(systemUser)
+print(vars(systemUser))
 
 while exit != 1:
 
