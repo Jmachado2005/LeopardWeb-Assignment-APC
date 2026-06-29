@@ -1,7 +1,7 @@
 # this will be the main file where everything will be run from. 
 # This is the file that the end user will interact with.
 
-import LeopardWeb_Project_Functions
+from LeopardWeb_Project_Functions import login
 import LeopardWeb_Project_DB_Commands
 import LeopardWeb_Project_GUI_Commands
 from LeopardWeb_Project_Classes_and_Objects import User, Student, Instructor, Admin
@@ -19,6 +19,11 @@ adminTest = Admin
 exit = 0    # variable used to exit loop when the user wants to logout
 
  # *** TO DO: figure out how to get past the login part and show the selection screen for end-user based on their role ***
+
+systemUser = login()
+
+print("*** User Using System: ***")
+print(systemUser)
 
 while exit != 1:
 

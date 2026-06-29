@@ -1,5 +1,7 @@
 # this is the .py file that will contain all the code for the classes and objects of the LeopardWeb project
 
+from ctypes.util import test
+from math import e
 import re
 import sqlite3
 import tkinter
@@ -18,30 +20,6 @@ class User:
         self.last_name = last_name
         self.wit_ID = wit_ID
         self.email = email
-
-    def login(self):
-        print("login");
-        username = input("Username: ")
-        password = input ("Password: ")
-        cursor.execute("""SELECT * FROM LOGIN WHERE USERNAME = ? AND PASSWORD = ?""", (username, password)); #Use this to pass variables into a query
-        user_info = cursor.fetchone()
-
-        if(str(user_info[0])[0] == 1):
-            cursor.execute("""SELECT * FROM STUDENT WHERE ID = ?""", (user_info[0]));
-            student_info = cursor.fetchone()
-            user = Student(student_info[0], student_info[1], student_info[2], student_info[3], student_info[4], student_info[5])
-
-        elif(str(user_info[0])[0] == 2):
-            cursor.execute("""SELECT * FROM INSTRUCTOR WHERE ID = ?""", (user_info[0]));
-            professor_info = cursor.fetchone()
-            user = Instructor(professor_info[0], professor_info[1], professor_info[2], professor_info[3], professor_info[4], professor_info[5], professor_info[6], professor_info[7])
-
-        elif(str(user_info[0])[0] == 3):
-            cursor.execute("""SELECT * FROM ADMIN WHERE ID = ?""", (user_info[0]));
-            admin_info = cursor.fetchone()
-            user = Admin(admin_info[0], admin_info[1], admin_info[2], admin_info[3], admin_info[4], admin_info[5])
-
-        return user
 
     def course_search(self):
         semester = input("What semester are you searching for courses in: ")
@@ -290,6 +268,7 @@ class Admin(User):
         self.office = office
 
     def add_course_system(self):
+        print("Add Course to System")
         print ("add later")
 
     def add_student(self):
@@ -343,13 +322,17 @@ class Admin(User):
         cursor.exectute(sql_command)
 
     def link_instructor(self):
-
+        print("Link Instructor to Course")
+        print ("Not finished yet")
     def unlink_instructor(self):
-
+        print("Unlink Instructor from Course")
+        print ("Not finished yet")
     def add_student_course(self):
-
+        print("Add student to Course")
+        print ("Not finished yet")
     def remove_student_course(self):
-        
+        print("Remove student from Course")
+        print ("Not finished yet")
 
 class Course:
     def __init__(self, CRN, title, department, time, days_of_week, semester, year, credit):
