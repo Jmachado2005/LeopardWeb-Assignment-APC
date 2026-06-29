@@ -43,13 +43,37 @@ class User:
 
         return user
 
-    def logout(self):
-        print("logout");
     def course_search(self):
-        print("course search");
+        semester = input("What semester are you searching for courses in: ")
+        cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ?""", (semester));
+        for row in cursor:
+            print(row)
         
     def parameter_search(self):
-        print("parameter search");
+        semester = input("What semester are you searching for courses in: ")
+        additional_search = input("Do you want to search with an additional parameter: ")
+        if additional_search == "Yes":
+            print("Year")
+            print("Department")
+            print("Credits")
+            parameter_two = input("Choose One: ")
+            parameter_value = input("Enter a value/department: ")
+            if parameter_two == "Year":
+                cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND YEAR = ?""", (semester, parameter_value));
+                for row in cursor:
+                    print(row)
+            elif parameter_two == "Department":
+                cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND DEPARTMENT = ?""", (semester, parameter_value));
+                for row in cursor:
+                    print(row)
+            elif parameter_two == "Credits":
+                cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND CREDITS = ?""", (semester, parameter_value));
+                for row in cursor:
+                    print(row)
+        else:
+            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ?""", (semester));
+            for row in cursor:
+                print(row)
 
 class Student(User):
     def __init__(self, wit_ID, first_name, last_name, grad_year, major, email):
