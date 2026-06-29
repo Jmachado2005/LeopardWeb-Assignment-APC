@@ -24,13 +24,14 @@ systemUser = login()
 
 print("*** User Using System: ***")
 print(vars(systemUser))
+print(systemUser.wit_ID)
 
 while exit != 1:
 
     # showing selection screen based on role
 
-    if (role == 1):     # student has logged in
-         print("Welcome, [name here]!")
+    if (systemUser.wit_ID > 10000 and systemUser.wit_ID < 20000):     # student has logged in
+         print("Welcome, " + systemUser.first_name + " " + systemUser.last_name + "!")
          print("Please see below for your options:")
 
          print("[1] - Search Courses")
@@ -54,14 +55,13 @@ while exit != 1:
          elif (choice == 5):
             studentTest.print_schedule()
          elif (choice == 0):
-            studentTest.logout
             exit = 1;
          else:
-            print("Invalid option. Pleas try again")
+            print("Invalid option. Please try again")
 
 
-    elif (role == 2):   # instructor has logged in
-         print("Welcome, [name here]!")
+    elif (systemUser.wit_ID > 20000 and systemUser.wit_ID < 30000):   # instructor has logged in
+         print("Welcome, Professor " + systemUser.last_name)
          print("Please see below for your options:")
 
          print("[1] - Search Courses")
@@ -85,13 +85,12 @@ while exit != 1:
          elif (choice == 5):
             instructorTest.print_roster()
          elif (choice == 0):
-            instructorTest.logout
             exit = 1;
          else:
-            print("Invalid option. Pleas try again")
+            print("Invalid option. Please try again")
 
-    elif (role == 3):   # admin has logged in
-         print("Welcome, [name here]!")
+    elif (systemUser.wit_ID > 30000):   # admin has logged in
+         print("Welcome, " + systemUser.title + " " + systemUser.first_name + " " + systemUser.last_name)
          print("Please see below for your options:")
 
          print("[1] - Search Courses")
@@ -126,10 +125,9 @@ while exit != 1:
          elif (choice == 9):
             adminTest.remove_student_course
          elif (choice == 0):
-            adminTest.logout
             exit = 1;
          else:
-            print("Invalid option. Pleas try again")
+            print("Invalid option. Please try again")
 
          
 
