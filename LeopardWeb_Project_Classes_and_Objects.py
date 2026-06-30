@@ -297,6 +297,7 @@ class Admin(User):
         self.title = title
         self.office = office
 
+    # Add a course to the database
     def add_course_system(self):
         print ("Add a Course")
 
