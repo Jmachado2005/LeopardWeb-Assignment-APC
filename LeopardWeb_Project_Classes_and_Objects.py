@@ -426,21 +426,42 @@ class Admin(User):
         regNum = input("Enter CRN of course to link instructor to: ")
         instID = input("Enter ID of instructor to link to course: ")
         
-        # Updates the courses table to have the linked instructor
-        cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = ? WHERE CRN = ?;""", (instID, regNum,))
-        conn.commit()
+
+        # checks if instructor exists
+        cursor.execute("""SELECT * FROM INSTRUCTOR WHERE ID = ?""", (instID,))
+
+        if cursor.fetchone() is None:
+            print("\nInstructor not found!\n")
+            return
+        else:
+            # checks if course exists
+            cursor.execute("""SELECT * FROM COURSES WHERE CRN = ?""", (regNum,))
+            if cursor.fetchone() is None:
+                print("\nCourse not found!\n")
+                return
+            else:
+                # Updates the courses table to have the linked instructor
+                cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = ? WHERE CRN = ?;""", (instID, regNum,))
+                conn.commit()
 
         print(f"\nSuccessfully linked Instructor {instID} to course {regNum}!\n")
     
     # Unlinks an intructor from a course in the database
     def unlink_instructor(self):
 
-        # Sets the instructor linkes to the selected course to NULL
+        # Sets the instructor linked to the selected course to NULL
         regNum = input("Enter CRN of course to unlink instructor from: ")
-        cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = NULL WHERE CRN = ?""", (regNum,))
 
-        print(cursor.rowcount)
-        conn.commit()
+        cursor.execute("""SELECT * FROM COURSES WHERE CRN = ?""", (regNum,))
+        if cursor.fetchone() is None:
+            print("\nCourse not found!\n")
+            return
+        else:
+            cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = NULL WHERE CRN = ?""", (regNum,))
+            print(cursor.rowcount)
+            conn.commit()
+
+        
 
         print(f"\nSuccessfully unlinked Instructor from course: {regNum}!\n")
     
@@ -468,13 +489,18 @@ class Admin(User):
             print("\nCourse not found!\n")
             return
 
-        # Checks to see if student is already enrolled in the course that was entered
-        if CRN in student[6:11]:
-            print("\nStudent is already enrolled in this course.\n")
-            return
+
+        course_columns = ["COURSE_ONE", "COURSE_TWO", "COURSE_THREE", "COURSE_FOUR", "COURSE_FIVE"]
+
+
+        for i in range(5):
+            # Checks to see if student is already enrolled in the course that was entered
+            if student[6+i] is CRN:
+                print("\nStudent is already enrolled in this course.\n")
+                return
 
         # Finds the first empty spot in the students schedule
-        course_columns = ["COURSE_ONE", "COURSE_TWO", "COURSE_THREE", "COURSE_FOUR", "COURSE_FIVE"]
+        
 
         for i in range(5):
 
@@ -497,11 +523,16 @@ class Admin(User):
         studentID = input("Enter ID of student to remove from course: ")
         CRN = input("Enter CRN of course to remove student from: ")
 
+        int(studentID)
         # Checks to make sure the student exists and is enrolled in the selected course then removes them from it
-        cursor.execute(f"""SELECT COUNT(*) FROM STUDENT WHERE ID = ?""", (studentID))
+        cursor.execute("""SELECT * FROM STUDENT WHERE ID = ?""", (studentID,))
 
-        if cursor.fetchone() is not None:
-            
+        if cursor.fetchone() is None:
+             print("\nStudent does not exist\n")
+             return
+
+        else:
+           
             course_columns = ["COURSE_ONE", "COURSE_TWO", "COURSE_THREE", "COURSE_FOUR", "COURSE_FIVE"]
 
             for column in course_columns:
@@ -515,9 +546,6 @@ class Admin(User):
 
                     print(f"\nSuccessfully removed student {studentID} from course {CRN}!\n")
                     return
-        else:
-            print("\nStudent does not exist\n")
-            return
 
         print("\nStudent is not enrolled in that course.\n")
 
