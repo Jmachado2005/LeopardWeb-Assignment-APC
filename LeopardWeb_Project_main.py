@@ -22,15 +22,16 @@ exit = 0    # variable used to exit loop when the user wants to logout
 
 systemUser = login()
 
-print("*** User Using System: ***")
-print(vars(systemUser))
-print(systemUser.wit_ID)
+#DEBUGGING
+# print("*** User Using System: ***")
+# print(vars(systemUser))
+# print(systemUser.wit_ID)
 
 while exit != 1:
 
     # showing selection screen based on role
-
     if (systemUser.wit_ID > 10000 and systemUser.wit_ID < 20000):     # student has logged in
+         print("----------------------LEOPARDWEB APC PROJECT----------------------")
          print("Welcome, " + systemUser.first_name + " " + systemUser.last_name + "!")
          print("Please see below for your options:")
 
@@ -43,25 +44,30 @@ while exit != 1:
 
          print(f"Enter your choice below ")
          choice = input("Choice: ")
+         choice = int(choice)
+
+         #DEBUGGING  print(choice)
 
          if (choice == 1):
-             studentTest.course_search()
+             systemUser.course_search()
          elif (choice == 2):
-             studentTest.parameter_search()
+             systemUser.parameter_search()
          elif (choice == 3):
-            studentTest.addDrop_course()
+            systemUser.addDrop_course()
          elif (choice == 4):
-            studentTest.check_conflicts()
+            systemUser.check_conflicts()
          elif (choice == 5):
-            studentTest.print_schedule()
+            systemUser.print_schedule()
          elif (choice == 0):
-            exit = 1;
+             print("Goodbye!")
+             exit = 1;
          else:
             print("Invalid option. Please try again")
 
 
     elif (systemUser.wit_ID > 20000 and systemUser.wit_ID < 30000):   # instructor has logged in
-         print("Welcome, Professor " + systemUser.last_name)
+         print("----------------------LEOPARDWEB APC PROJECT----------------------")
+         print("Welcome, Professor " + systemUser.last_name + "!")
          print("Please see below for your options:")
 
          print("[1] - Search Courses")
@@ -73,24 +79,27 @@ while exit != 1:
 
          print(f"Enter your choice below ")
          choice = input("Choice: ")
+         choice = int(choice)
 
          if (choice == 1):
-             instructorTest.course_search()
+             systemUser.course_search()
          elif (choice == 2):
-             instructorTest.parameter_search()
+             systemUser.parameter_search()
          elif (choice == 3):
-            instructorTest.print_teaching_schedule()
+            systemUser.print_teaching_schedule()
          elif (choice == 4):
-            instructorTest.search_student()
+            systemUser.search_student()
          elif (choice == 5):
-            instructorTest.print_roster()
+            systemUser.print_roster()
          elif (choice == 0):
+            print("Goodbye!")
             exit = 1;
          else:
             print("Invalid option. Please try again")
 
     elif (systemUser.wit_ID > 30000):   # admin has logged in
-         print("Welcome, " + systemUser.title + " " + systemUser.first_name + " " + systemUser.last_name)
+         print("----------------------LEOPARDWEB APC PROJECT----------------------")
+         print("Welcome, " + systemUser.title + " " + systemUser.first_name + " " + systemUser.last_name + "!")
          print("Please see below for your options:")
 
          print("[1] - Search Courses")
@@ -105,26 +114,28 @@ while exit != 1:
          print("[0] - Logout")
          print(f"Enter your choice below ")
          choice = input("Choice: ")
+         choice = int(choice)
 
          if (choice == 1):
-            adminTest.course_search()
+            systemUser.course_search()
          elif (choice == 2):
-             adminTest.parameter_search()
+             systemUser.parameter_search()
          elif (choice == 3):
-            adminTest.add_course_system
+            systemUser.add_course_system()
          elif (choice == 4):
-            adminTest.add_student
+            systemUser.add_student()
          elif (choice == 5):
-            adminTest.add_instructor
+            systemUser.add_instructor()
          elif (choice == 6):
-             adminTest.link_instructor
+             systemUser.link_instructor()
          elif (choice == 7):
-            adminTest.unlink_instructor
+            systemUser.unlink_instructor()
          elif (choice == 8):
-            adminTest.add_student_course
+            systemUser.add_student_course()
          elif (choice == 9):
-            adminTest.remove_student_course
+            systemUser.remove_student_course()
          elif (choice == 0):
+            print("Goodbye!")
             exit = 1;
          else:
             print("Invalid option. Please try again")

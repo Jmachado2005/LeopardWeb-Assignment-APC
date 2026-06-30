@@ -15,7 +15,6 @@ def login():
             password = input ("Password: ")
             cursor.execute("""SELECT * FROM LOGIN WHERE USERNAME = ? AND PASSWORD = ?""", (username, password)); #Use this to pass variables into a query
             user_info = cursor.fetchone()
-            print(user_info)
 
             #make sure user's entered info is correct
             if user_info is None:
@@ -23,13 +22,12 @@ def login():
                 print("User not found. Please Try Again\n")
             elif user_info is not None:
                 # user exists in the system
-                print(f"User Data: {user_info}")
+                print(f"User Data: {user_info}\n\n")
 
                 # get the user ID to fetch the correct information from the database
                 userID = int(user_info[0])
 
                 if(user_info[3] == 1):
-                    # TESTING:  print("*** TRYING TO RETURN A STUDENT ***")
                     cursor.execute("""SELECT * FROM STUDENT WHERE ID = ?""", (userID,));
                     student_info = cursor.fetchone()
                     systemUser = Student(wit_ID=student_info[0], first_name=student_info[1], last_name=student_info[2], grad_year=student_info[3], major=student_info[4], email=student_info[5])
