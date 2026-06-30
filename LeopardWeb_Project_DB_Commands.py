@@ -229,7 +229,7 @@ cursor.execute(sql_command)
 sql_command = """INSERT OR IGNORE INTO INSTRUCTOR VALUES(20004, 'Carly', 'Gates', 'Professor' , 2026, 'ARCH', 'gatesc@wit.edu');"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(20004, 'gatesc@wit.edu', 'P3arlyGat3s', 2);"""
+sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(20004, 'gatesc', 'P3arlyGat3s', 2);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO INSTRUCTOR VALUES(20005, 'Josslyn', 'Beake', 'Assistant Professor', 2018, 'PHYS', 'beakej@wit.edu');"""
