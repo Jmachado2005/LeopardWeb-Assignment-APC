@@ -246,21 +246,21 @@ class Instructor(User):
         self.hire_year = hire_year
         self.department = department
 
-    def print_teaching_schedule(self):
+    def print_teaching_schedule(self):      # Prints out what classes the logged in professor is teaching.
         print("Your Teaching Schedule:\n")
-        cursor.execute("""SELECT * FROM COURSES WHERE INSTRUCTOR_ID = ?""", (str(self.wit_ID),),);
-        for row in cursor:
+        cursor.execute("""SELECT * FROM COURSES WHERE INSTRUCTOR_ID = ?""", (str(self.wit_ID),),); # Queries the database for the classes to print
+        for row in cursor:      # Prints each entry contained in the cursor to the UI
             print(row)
         print("\n")
 
     def search_student(self):
         print("\nYour Courses:")
-        cursor.execute("""SELECT * FROM COURSES WHERE INSTRUCTOR_ID = ?""", (str(self.wit_ID),),);
-        for row in cursor:
+        cursor.execute("""SELECT * FROM COURSES WHERE INSTRUCTOR_ID = ?""", (str(self.wit_ID),),); # Queries the database for courses the logged in instructor is teaching
+        for row in cursor: # Prints each course to the UI
             print(row)
         print("\n")
-        course = input("Enter a CRN from above of the course roster you want to search: ")
-        student = int(input("Enter the ID of the student you are searching for: "))
+        course = input("Enter a CRN from above of the course roster you want to search: ") # Decide which roster you want to search
+        student = int(input("Enter the ID of the student you are searching for: ")) # Choose which student you are looking for
 
         # checks to see if a student is taking the particular course CRN the user enters above
         cursor.execute("""SELECT ID FROM STUDENT WHERE ID = ? AND (COURSE_ONE = ? OR COURSE_TWO = ? OR COURSE_THREE = ? OR COURSE_FOUR = ? OR COURSE_FIVE = ?)""", (student, course, course, course, course, course));
@@ -269,23 +269,24 @@ class Instructor(User):
         result = cursor.fetchone()
 
         if result:
-            print("\nThis student is taking your course.\n")
+            print("\nThis student is taking your course.\n") # If result is not blank the student is taking the course
         else:
-            print("\nThis student is not taking your course.\n")
+            print("\nThis student is not taking your course.\n") # If the result is blank the student is not taking the course
 
     def print_roster(self):
         print("\nYour Courses:")
-        cursor.execute("""SELECT * FROM COURSES WHERE INSTRUCTOR_ID = ?""", (str(self.wit_ID),),);
-        for row in cursor:
+        cursor.execute("""SELECT * FROM COURSES WHERE INSTRUCTOR_ID = ?""", (str(self.wit_ID),),); # Queries the database for courses the logged in instructor is teaching
+        for row in cursor:  # Prints each course to the UI
             print(row)
         print("\n")
 
-        courseCRN = input("What is the CRN of the course roster you want to view: ")
+        courseCRN = input("What is the CRN of the course roster you want to view: ")    # Select which course you want to print the roster for
       
+        # Check the courses each student is taking and get the Name, Surname, and ID from the databases if they are enrolled in the searched course
         cursor.execute("""SELECT NAME, SURNAME, ID FROM STUDENT WHERE COURSE_ONE = ? OR COURSE_TWO = ? OR COURSE_THREE = ? OR COURSE_FOUR = ? OR COURSE_FIVE = ?""", (courseCRN, courseCRN, courseCRN, courseCRN, courseCRN));
         print(f"Course Roster for: {courseCRN}\n")
         print("NAME | SURNAME | ID")
-        for row in cursor:
+        for row in cursor:  # Print each student enrolled in the course
             print(row)
         print("\n")
 
