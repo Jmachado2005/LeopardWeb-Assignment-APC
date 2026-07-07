@@ -16,7 +16,7 @@ def login():
             cursor.execute("""SELECT * FROM LOGIN WHERE USERNAME = ? AND PASSWORD = ?""", (username, password)); #Use this to pass variables into a query
             user_info = cursor.fetchone()
 
-            #make sure user's entered info is correct
+            # make sure user's entered info is correct
             if user_info is None:
                 # user does NOT exist in the system
                 print("Incorrect Username and/or Password. Please Try Again\n")
