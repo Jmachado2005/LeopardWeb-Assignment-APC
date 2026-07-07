@@ -425,10 +425,24 @@ class Admin(User):
         # Has the user enter the ID of the instructor and the CRN of the course they want to link them to
         regNum = input("Enter CRN of course to link instructor to: ")
         instID = input("Enter ID of instructor to link to course: ")
-        
-        # Updates the courses table to have the linked instructor
-        cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = ? WHERE CRN = ?;""", (instID, regNum,))
-        conn.commit()
+
+
+        # checks if instructor exists
+        cursor.execute("""SELECT * FROM INSTRUCTOR WHERE ID = ?""", (instID,))
+
+        if cursor.fetchone() is None:
+            print("\nInstructor not found!\n")
+            return
+        else:
+            # checks if course exists
+            cursor.execute("""SELECT * FROM COURSES WHERE CRN = ?""", (regNum,))
+            if cursor.fetchone() is None:
+                print("\nCourse not found!\n")
+                return
+            else:
+                # Updates the courses table to have the linked instructor
+                cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = ? WHERE CRN = ?;""", (instID, regNum,))
+                conn.commit()
 
         print(f"\nSuccessfully linked Instructor {instID} to course {regNum}!\n")
     
