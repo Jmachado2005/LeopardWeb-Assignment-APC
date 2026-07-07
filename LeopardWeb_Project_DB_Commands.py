@@ -86,6 +86,12 @@ cursor.execute(sql_command)
 sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(30002, 'machadoj', 'testing123', 3);"""
 cursor.execute(sql_command)
 
+sql_command = """INSERT OR IGNORE INTO ADMIN VALUES(30003, 'David', 'Vozzo', 'Certified Human', 'Human Resourses', 'vozzodwit.edu');"""
+cursor.execute(sql_command)
+
+sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(30003, 'vozzod', 'securePassword', 3);"""
+cursor.execute(sql_command)
+
 # Adding 20 students into STUDENTS table and then add them to the LOGIN table
 sql_command = """INSERT OR IGNORE INTO STUDENT VALUES(10001, 'Burt', 'Chance', 2027, 'Applied Science', 'chanceb@wit.edu', NULL, NULL, NULL, NULL, NULL);"""
 cursor.execute(sql_command)
@@ -229,7 +235,7 @@ cursor.execute(sql_command)
 sql_command = """INSERT OR IGNORE INTO INSTRUCTOR VALUES(20004, 'Carly', 'Gates', 'Professor' , 2026, 'ARCH', 'gatesc@wit.edu');"""
 cursor.execute(sql_command)
 
-sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(20004, 'gatesc@wit.edu', 'P3arlyGat3s', 2);"""
+sql_command = """INSERT OR IGNORE INTO LOGIN VALUES(20004, 'gatesc', 'P3arlyGat3s', 2);"""
 cursor.execute(sql_command)
 
 sql_command = """INSERT OR IGNORE INTO INSTRUCTOR VALUES(20005, 'Josslyn', 'Beake', 'Assistant Professor', 2018, 'PHYS', 'beakej@wit.edu');"""

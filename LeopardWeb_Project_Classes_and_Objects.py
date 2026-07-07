@@ -292,14 +292,17 @@ class Instructor(User):
 
 
 class Admin(User):
-
+    #Constructor
     def __init__(self, wit_ID, first_name, last_name, title, office, email):
         super().__init__(first_name, last_name, wit_ID, email)
         self.title = title
         self.office = office
 
+    # Add a course to the database
     def add_course_system(self):
         print ("Add a Course")
+
+        # Allows the input of a CRN while checking to make sure it doesn't already exist
         CRN = 1
 
         while CRN == 1:
@@ -311,7 +314,7 @@ class Admin(User):
                 print ("CRN already exists or value is negative, please enter a new CRN")
                 CRN = 1
 
-
+        # Entering and declaring other variables for insert into courses
         title = input("Enter course title: ")
         dep = input("Enter department: ")
         time = input("Enter time (range): ")
@@ -321,36 +324,48 @@ class Admin(User):
         year = input("Enter year: ")
         creds = int(input("Enter credits: "))
 
-
+        # Inserts course into database using above declarations
         cursor.execute("""INSERT OR IGNORE INTO COURSES VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);""", (CRN, title, dep, time, DoW, instID, semester, year, creds,))
         conn.commit()
         print(f"\nCourse: '{title}' Successfully added to the system!")
 
+
+    # Adds a student to the database
     def add_student(self):
         print ("Add a Student")
+
+        # Variable declaration
         fName = input("Enter first name: ")
         lName = input("Enter last name: ")
         YoG = int(input("Enter year of graduation: "))
         Major = input("Enter major: ")
         Username = lName
+        password = input("Enter password: ")
 
+        # Checks if username is unique. If it isn't it adds a number to the end to correspond to number of users with that username
         cursor.execute("""SELECT COUNT(*) FROM STUDENT WHERE SURNAME = ?;""", (str(Username),),)
         query_result = cursor.fetchone()
+        cursor.execute("""SELECT COUNT(*) FROM INSTRUCTOR WHERE SURNAME = ?;""", (str(Username),),)
+        query_result = cursor.fetchone() + query_result
+        cursor.execute("""SELECT COUNT(*) FROM ADMIN WHERE SURNAME = ?;""", (str(Username),),)
+        query_result = cursor.fetchone() + query_result
 
+        # Adds the corresponding number to the end of the username if relevant. Sets student email to username + @wit.edu
         if query_result[0] > 0:
             Username = (Username.lower()) + fName[0].lower() + str(query_result[0])
         else:
             Username = (Username.lower()) + fName[0].lower()
 
-        password = input("Enter password: ")
-
-        cursor.execute("""SELECT MAX(ID) FROM STUDENT;""")
-        maximum = cursor.fetchone()
-
-        idNum = maximum[0] + 1
-
         email = Username + "@wit.edu"
 
+        
+        # Finds the max ID # that currently exists in the database and adds one to it. Sets the new user to that number
+        cursor.execute("""SELECT MAX(ID) FROM STUDENT;""")
+        maximum = cursor.fetchone()
+        idNum = maximum[0] + 1
+
+        
+        # Inserts new student into login and student databases using above declarations
         cursor.execute("""INSERT OR IGNORE INTO STUDENT VALUES(?, ?, ?, ?, ?, ?, NULL, NULL, NULL, NULL, NULL)""", (idNum, fName, lName, YoG, Major, email))
         conn.commit()
 
@@ -358,33 +373,44 @@ class Admin(User):
         conn.commit()
 
         print(f"\nStudent: '{fName} {lName}' successfully added to the system as: '{Username}'!\n")
+    
 
+    # Adds an instructor to the database
     def add_instructor(self):
         print ("Add an Instructor")
+
+        # Has user declare relevant variables
         fName = input("Enter first name: ")
         lName = input("Enter last name: ")
         title = input("Enter title: ")
         YoH = input("Enter year of hire: ")
         dept = input("Enter department: ")
         Username = lName
+        password = input("Enter password: ")
 
-        cursor.execute("""SELECT COUNT(*) FROM INSTRUCTOR WHERE SURNAME = ?;""", (str(Username),),)
+        # Checks if username is unique. If it isn't it adds a number to the end to correspond to number of users with that username
+        cursor.execute("""SELECT COUNT(*) FROM STUDENT WHERE SURNAME = ?;""", (str(Username),),)
         query_result = cursor.fetchone()
+        cursor.execute("""SELECT COUNT(*) FROM INSTRUCTOR WHERE SURNAME = ?;""", (str(Username),),)
+        query_result = cursor.fetchone() + query_result
+        cursor.execute("""SELECT COUNT(*) FROM ADMIN WHERE SURNAME = ?;""", (str(Username),),)
+        query_result = cursor.fetchone() + query_result
 
+        # Adds the corresponding number to the end of the username if relevant. Sets instructor email to username + @wit.edu
         if query_result[0] > 0:
             Username = (Username.lower()) + fName[0].lower() + str(query_result[0])
         else:
             Username = (Username.lower()) + fName[0].lower()
-
-        password = input("Enter password: ")
-
-        cursor.execute("""SELECT MAX(ID) FROM INSTRUCTOR;""")
-        maximum = cursor.fetchone()
-
-        idNum = maximum[0] + 1
-
+        
         email = Username + "@wit.edu"
 
+        # Finds the max ID # that currently exists in the instructor database and adds one to it. Sets the new user to that number
+        cursor.execute("""SELECT MAX(ID) FROM INSTRUCTOR;""")
+        maximum = cursor.fetchone()
+        idNum = maximum[0] + 1
+
+        
+        # Inserts new instructor into login and instructor databases using above declarations
         cursor.execute("""INSERT OR IGNORE INTO INSTRUCTOR VALUES(?, ?, ?, ?, ?, ?, ?);""", (idNum, fName, lName, title, YoH, dept, email))
         conn.commit()
 
@@ -393,25 +419,57 @@ class Admin(User):
 
         print(f"\nInstructor: '{fName} {lName}' successfully added to the system as: '{Username}'!\n")
 
+
+    # Links an instructor to a course in the database
     def link_instructor(self):
+
+        # Has the user enter the ID of the instructor and the CRN of the course they want to link them to
         regNum = input("Enter CRN of course to link instructor to: ")
         instID = input("Enter ID of instructor to link to course: ")
-        
-        cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = ? WHERE CRN = ?;""", (instID, regNum,))
-        conn.commit()
+
+
+        # checks if instructor exists
+        cursor.execute("""SELECT * FROM INSTRUCTOR WHERE ID = ?""", (instID,))
+
+        if cursor.fetchone() is None:
+            print("\nInstructor not found!\n")
+            return
+        else:
+            # checks if course exists
+            cursor.execute("""SELECT * FROM COURSES WHERE CRN = ?""", (regNum,))
+            if cursor.fetchone() is None:
+                print("\nCourse not found!\n")
+                return
+            else:
+                # Updates the courses table to have the linked instructor
+                cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = ? WHERE CRN = ?;""", (instID, regNum,))
+                conn.commit()
 
         print(f"\nSuccessfully linked Instructor {instID} to course {regNum}!\n")
-
+    
+    # Unlinks an intructor from a course in the database
     def unlink_instructor(self):
-        regNum = input("Enter CRN of course to unlink instructor from: ")
-        cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = NULL WHERE CRN = ?""", (regNum,))
 
-        print(cursor.rowcount)
-        conn.commit()
+        # Sets the instructor linked to the selected course to NULL
+        regNum = input("Enter CRN of course to unlink instructor from: ")
+
+        cursor.execute("""SELECT * FROM COURSES WHERE CRN = ?""", (regNum,))
+        if cursor.fetchone() is None:
+            print("\nCourse not found!\n")
+            return
+        else:
+            cursor.execute("""UPDATE COURSES SET INSTRUCTOR_ID = NULL WHERE CRN = ?""", (regNum,))
+            print(cursor.rowcount)
+            conn.commit()
+
+        
 
         print(f"\nSuccessfully unlinked Instructor from course: {regNum}!\n")
+    
         
+    # Adds a student to a course
     def add_student_course(self):
+        # Has the user enter the ID of the student and the CRN of the course they want to add them to
         studentID = input("Enter ID of student to add to course: ")
         CRN = input("Enter CRN of course to add student to: ")
 
@@ -432,13 +490,18 @@ class Admin(User):
             print("\nCourse not found!\n")
             return
 
-        # Checks to see if student is already enrolled in the course that was entered
-        if CRN in student[6:11]:
-            print("\nStudent is already enrolled in this course.\n")
-            return
 
-        #used to find the first empty slot in a student's schedule
         course_columns = ["COURSE_ONE", "COURSE_TWO", "COURSE_THREE", "COURSE_FOUR", "COURSE_FIVE"]
+
+
+        for i in range(5):
+            # Checks to see if student is already enrolled in the course that was entered
+            if student[6+i] is CRN:
+                print("\nStudent is already enrolled in this course.\n")
+                return
+
+        # Finds the first empty spot in the students schedule
+        
 
         for i in range(5):
 
@@ -450,25 +513,40 @@ class Admin(User):
             print(f"\nSuccessfully added student {studentID} to course {CRN}!\n")
             return
 
-        print("\nStudent is already enrolled in 5 courses.\n")  # only prints if the if statement above doesn't run (since student is enrolled in 5 courses)
-            
+        # Prints a message that student is already enrolled in max number of courses if there is no empty spot in their schedule
+        print("\nStudent is already enrolled in 5 courses.\n")
+    
+        
+    # Removes a student from a course
     def remove_student_course(self):
+
+        # Has the user enter the student ID and the CRN of the course they want to remove the student from
         studentID = input("Enter ID of student to remove from course: ")
         CRN = input("Enter CRN of course to remove student from: ")
 
-        course_columns = ["COURSE_ONE", "COURSE_TWO", "COURSE_THREE", "COURSE_FOUR", "COURSE_FIVE"]
+        int(studentID)
+        # Checks to make sure the student exists and is enrolled in the selected course then removes them from it
+        cursor.execute("""SELECT * FROM STUDENT WHERE ID = ?""", (studentID,))
 
-        for column in course_columns:
+        if cursor.fetchone() is None:
+             print("\nStudent does not exist\n")
+             return
 
-            cursor.execute(f"""SELECT * FROM STUDENT WHERE ID = ? AND {column} = ?""", (studentID, CRN))
+        else:
+           
+            course_columns = ["COURSE_ONE", "COURSE_TWO", "COURSE_THREE", "COURSE_FOUR", "COURSE_FIVE"]
 
-            if cursor.fetchone() is not None:
+            for column in course_columns:
 
-                cursor.execute(f"""UPDATE STUDENT SET {column} = NULL WHERE ID = ?""", (studentID,))
-                conn.commit()
+                cursor.execute(f"""SELECT * FROM STUDENT WHERE ID = ? AND {column} = ?""", (studentID, CRN))
 
-                print(f"\nSuccessfully removed student {studentID} from course {CRN}!\n")
-                return
+                if cursor.fetchone() is not None:
+
+                    cursor.execute(f"""UPDATE STUDENT SET {column} = NULL WHERE ID = ?""", (studentID,))
+                    conn.commit()
+
+                    print(f"\nSuccessfully removed student {studentID} from course {CRN}!\n")
+                    return
 
         print("\nStudent is not enrolled in that course.\n")
 
