@@ -19,7 +19,7 @@ def login():
             #make sure user's entered info is correct
             if user_info is None:
                 # user does NOT exist in the system
-                print("User not found. Please Try Again\n")
+                print("Incorrect Username and/or Password. Please Try Again\n")
             elif user_info is not None:
                 # user exists in the system
                 print(f"User Data: {user_info}\n\n")
