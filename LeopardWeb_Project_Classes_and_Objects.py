@@ -136,6 +136,7 @@ class Student(User):
                         print("Sending you back to Add/Drop Courses menu...\n\n")    
                 else:   # if the course does not exist
                     print("Course does not exist in database. Please try again.\n\n")
+                    exit = 1;
 
             elif choice == "D":  # DROP
                 # Ask student to enter the CRN of the course they want to drop
@@ -148,7 +149,8 @@ class Student(User):
                 schedule = cursor.fetchone()
 
                 if crn_choice not in schedule:
-                    print("\nThis course is not in your schedule\n\n")
+                    print("\nThis course is not in your schedule. Please try again\n\n")
+                    exit = 1
                 else:
                     print("\nCourse was found in your schedule!")
                     print("Are you sure you want to drop this course? (Y/N)")
@@ -176,6 +178,10 @@ class Student(User):
                     print("Sending you back to the selection screen...\n\n")
                 else:
                     print("\nInvalid Option. Pleae try again\n")
+            else:
+                print("Invalid Option! ")
+                print("Sending you back to the main selection menu...\n\n")
+                exit = 1
 
     def check_conflicts(self):
         print("Check Conflicts:")
