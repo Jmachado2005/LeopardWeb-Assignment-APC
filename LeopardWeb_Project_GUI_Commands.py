@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
+from tkinter.font import BOLD
 # from PTL import Image, ImageTk
 from LeopardWeb_Project_Functions import login
 from LeopardWeb_Project_Classes_and_Objects import User, Student, Instructor, Admin
@@ -28,7 +29,7 @@ def open_portal(username):
     
     portal = tk.Toplevel()
     portal.title("Student Portal")
-    portal.geometry("400x300")
+    portal.geometry("1280x720")
 
     # Branding title inside the window
     title_label = tk.Label(portal,
@@ -105,38 +106,42 @@ systemUser = None
 # ** Login Window ** #
 window = tk.Tk()
 
-window.title("login Portal")
+window.title("Login Portal")
 window.geometry("640x360")
 
 #creating label for username box
-username_label = tk.Label(window, text="Username: ")
-username_label.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+username_label = tk.Label(window, text="Username: ", font=("Arial", 12))
+username_label.grid(row=0, column=0, padx=50, pady=10, sticky="e")
 
 #creating text entry for username box
-username_entry = tk.Entry(window, width=30)
-username_entry.grid(row=0, column=1, padx=10, pady=10)
+username_entry = tk.Entry(window, width=30, font=("Arial", 12))
+username_entry.grid(row=0, column=1, padx=0, pady=10)
 
 #creating label for password box
-password_label = tk.Label(window, text="Password:")
-password_label.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+password_label = tk.Label(window, text="Password:", font=("Arial", 12))
+password_label.grid(row=1, column=0, padx=50, pady=10, sticky="e")
 
 #creating text entry for password box
-password_entry = tk.Entry(window, width=30)
-password_entry.grid(row=1, column=1, padx=10, pady=10)
+password_entry = tk.Entry(window, width=30, font=("Arial", 12))
+password_entry.grid(row=1, column=1, padx=0, pady=10)
 
 # FOR LATER: note you might want to show the password while you are debugging then add in the show="*"
 # once you are satisfied it is working
 
 #creating login button
-login_button = tk.Button(window, text="Login", command=GUIlogin)
+login_button = tk.Button(window, text="Login", command=GUIlogin, width= 15, font=("" , 10, "bold"))
 
-login_button.grid(row=2, column=0, columnspan=2, pady=15)
+#login_button.grid(row=2, column=0, columnspan=2, pady=15)
+login_button.place(relx=0.5, rely=0.28, anchor=tk.CENTER)
 
 # pressing Enter calls login(). Without this you will always need to click the Login button
 window.bind("<Return>", GUIlogin)
 
 # start cursor in username box
 username_entry.focus()
+
+# centers the window on the screen
+window.eval('tk::PlaceWindow . center')
 
 # run application
 window.mainloop()
