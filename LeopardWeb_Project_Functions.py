@@ -6,22 +6,23 @@ import sqlite3
 conn = sqlite3.connect("LeopardWeb_Project.db")
 cursor = conn.cursor()
 
-def login():
+def login(username, password):
 
         #while (exit != 1):
-        print("Log In To System:")
-        username = input("Username: ")
-        password = input ("Password: ")
+        #print("Log In To System:")
+        #username = input("Username: ")
+        #password = input ("Password: ")
         cursor.execute("""SELECT * FROM LOGIN WHERE USERNAME = ? AND PASSWORD = ?""", (username, password)); #Use this to pass variables into a query
         user_info = cursor.fetchone()
 
         # make sure user's entered info is correct
         if user_info is None:
             # user does NOT exist in the system
-            print("Incorrect Username and/or Password. Please Try Again\n")
+            #print("Incorrect Username and/or Password. Please Try Again\n")
+            return None
         elif user_info is not None:
             # user exists in the system
-            print(f"User Data: {user_info}\n\n")
+            #print(f"User Data: {user_info}\n\n")
 
             # get the user ID to fetch the correct information from the database
             userID = int(user_info[0])

@@ -71,10 +71,12 @@ def open_portal(username):
     # except:
     #     pass
 
-def login(event=None):
+def GUIlogin(event=None):
     # get username and PW from user
     username = username_entry.get()
     password = password_entry.get()
+
+    systemUser = login(username, password)
 
     if systemUser is not None:
         # successful login - open a new window
@@ -89,7 +91,7 @@ def login(event=None):
             "Incorrect username and/or password.")
 
         #clears password box
-        passowrd_entry.delete(0, tk.END)
+        password_entry.delete(0, tk.END)
 
         #puts cursor back to the beginning of password box
         password_entry.focus()
@@ -126,12 +128,12 @@ password_entry.grid(row=1, column=1, padx=10, pady=10)
 # once you are satisfied it is working
 
 #creating login button
-login_button = tk.Button(window, text="Login", command=login)
+login_button = tk.Button(window, text="Login", command=GUIlogin)
 
 login_button.grid(row=2, column=0, columnspan=2, pady=15)
 
 # pressing Enter calls login(). Without this you will always need to click the Login button
-window.bind("<Return>", login)
+window.bind("<Return>", GUIlogin)
 
 # start cursor in username box
 username_entry.focus()
