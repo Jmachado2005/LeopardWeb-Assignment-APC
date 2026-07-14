@@ -20,11 +20,14 @@ exit = 0    # variable used to exit loop when the user wants to logout
 
  # *** TO DO: figure out how to get past the login part and show the selection screen for end-user based on their role ***
 
-systemUser = login()
+systemUser = None
+while systemUser is None:
+    systemUser = login()
+
 
 #DEBUGGING
 # print("*** User Using System: ***")
-# print(vars(systemUser))
+print(vars(systemUser))
 # print(systemUser.wit_ID)
 
 while exit != 1:
