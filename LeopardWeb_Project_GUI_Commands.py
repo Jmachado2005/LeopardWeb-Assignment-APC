@@ -1,1 +1,140 @@
 # commands for the GUI
+
+import tkinter as tk
+from tkinter import messagebox
+# from PTL import Image, ImageTk
+from LeopardWeb_Project_Functions import login
+from LeopardWeb_Project_Classes_and_Objects import User, Student, Instructor, Admin
+
+
+# "logout" function
+def open_exit_window():
+    exit_win = tk.Toplevel()
+    exit_win.title("Logout")
+    exit_win.geometry("300x150")
+
+    label = tk.Label(
+        exit_win,
+        text="You have been logged out.\nGoodbye!",
+        font=("Arial", 12)
+    )
+    label.pack(pady=30)
+
+    btn = tk.Button(exit_win, text="Close", command=exit_win.destroy)
+    btn.pack()
+
+#MODIFY LATER - this will be the main portal the user will interact with based on their role
+def open_portal(username):
+    
+    portal = tk.Toplevel()
+    portal.title("Student Portal")
+    portal.geometry("400x300")
+
+    # Branding title inside the window
+    title_label = tk.Label(portal,
+        text="STUDENT PORTAL",
+        font=("Arial", 18, "bold"))
+    title_label.pack(pady=10)
+
+    # welcome message
+    welcome_label = tk.Label(portal,
+        text=f"Welcome {username}",
+        font=("Arial", 12))
+    welcome_label.pack(pady=5)
+
+    # menu
+
+    game_button = tk.Button(portal, 
+        text="Play Game",
+        width=20,
+        command=play_game)
+    game_button.pack(pady=10)
+
+    exit_button = tk.Button(portal,
+        text="Exit",
+        width=20,
+        command=lambda: [portal.destroy(), open_exit_window()])
+    exit_button.pack(pady=10)
+
+    # # image logo (optional)
+    # try:
+    #     image = Image.open("logo.png")
+    #     image = image.resize((30, 30))  # small logo size
+    #     logo = ImageTk.PhotoImage(image)
+
+    #     # place in top-left corner
+    #     logo_label = tk.Label(portal, image=logo)
+    #     logo_label.place(x=5, y=5)
+
+    #     # prevent garbage collection
+    #     portal.logo = logo
+    # except:
+    #     pass
+
+def login(event=None):
+    # get username and PW from user
+    username = username_entry.get()
+    password = password_entry.get()
+
+    if systemUser is not None:
+        # successful login - open a new window
+        window.withdraw()
+
+        # call open portal function to open the correct login window based on the returned user's role
+        open_portal(systemUser.first_name)
+
+    else:
+        messagebox.showerror(
+            "Login Failed",
+            "Incorrect username and/or password.")
+
+        #clears password box
+        passowrd_entry.delete(0, tk.END)
+
+        #puts cursor back to the beginning of password box
+        password_entry.focus()
+
+
+# **************************** start of GUI code that runs this program ************************************* #
+
+# declare the system user as a GLOBAL variable to be used in the functions above
+systemUser = None
+
+# ** Login Window ** #
+window = tk.Tk()
+
+window.title("login Portal")
+window.geometry("640x360")
+
+#creating label for username box
+username_label = tk.Label(window, text="Username: ")
+username_label.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+
+#creating text entry for username box
+username_entry = tk.Entry(window, width=30)
+username_entry.grid(row=0, column=1, padx=10, pady=10)
+
+#creating label for password box
+password_label = tk.Label(window, text="Password:")
+password_label.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+
+#creating text entry for password box
+password_entry = tk.Entry(window, width=30)
+password_entry.grid(row=1, column=1, padx=10, pady=10)
+
+# FOR LATER: note you might want to show the password while you are debugging then add in the show="*"
+# once you are satisfied it is working
+
+#creating login button
+login_button = tk.Button(window, text="Login", command=login)
+
+login_button.grid(row=2, column=0, columnspan=2, pady=15)
+
+# pressing Enter calls login(). Without this you will always need to click the Login button
+window.bind("<Return>", login)
+
+# start cursor in username box
+username_entry.focus()
+
+# run application
+window.mainloop()
