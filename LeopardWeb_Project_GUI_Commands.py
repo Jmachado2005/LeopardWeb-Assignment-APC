@@ -25,37 +25,76 @@ def open_exit_window():
     btn.pack()
 
 #MODIFY LATER - this will be the main portal the user will interact with based on their role
-def open_portal(username):
-    
-    portal = tk.Toplevel()
-    portal.title("Student Portal")
-    portal.geometry("1280x720")
+def open_portal(user):
 
-    # Branding title inside the window
-    title_label = tk.Label(portal,
-        text="STUDENT PORTAL",
-        font=("Arial", 18, "bold"))
-    title_label.pack(pady=10)
+    if (isinstance(user, Student)):
+         
+        portal = tk.Toplevel()
+        portal.title("Student Portal")
+        portal.geometry("1280x720")
 
-    # welcome message
-    welcome_label = tk.Label(portal,
-        text=f"Welcome {username}",
-        font=("Arial", 12))
-    welcome_label.pack(pady=5)
+        # Branding title inside the window
+        title_label = tk.Label(portal,
+            text="STUDENT PORTAL",
+            font=("Arial", 18, "bold"))
+        title_label.pack(pady=10)
 
-    # menu
+        # welcome message
+        welcome_label = tk.Label(portal,
+            text=f"Welcome {user.first_name}",
+            font=("Arial", 12))
+        welcome_label.pack(pady=5)
 
-    game_button = tk.Button(portal, 
-        text="Play Game",
-        width=20,
-        command=play_game)
-    game_button.pack(pady=10)
+        exit_button = tk.Button(portal,
+            text="Exit",
+            width=20,
+            command=lambda: [portal.destroy(), open_exit_window()])
+        exit_button.pack(pady=10)
+        
+    elif (isinstance (user, Instructor)):
+        portal = tk.Toplevel()
+        portal.title("Instructor Portal")
+        portal.geometry("1280x720")
 
-    exit_button = tk.Button(portal,
-        text="Exit",
-        width=20,
-        command=lambda: [portal.destroy(), open_exit_window()])
-    exit_button.pack(pady=10)
+        title_label = tk.Label(portal,
+            text="INSTRUCTOR PORTAL",
+            font=("Arial", 18, "bold"))
+        title_label.pack(pady=10)
+
+        # welcome message
+        welcome_label = tk.Label(portal,
+            text=f"Welcome Professor {user.last_name}",
+            font=("Arial", 12))
+        welcome_label.pack(pady=5)
+
+        exit_button = tk.Button(portal,
+            text="Exit",
+            width=20,
+            command=lambda: [portal.destroy(), open_exit_window()])
+        exit_button.pack(pady=10)
+    elif (isinstance (user, Admin)):
+        portal = tk.Toplevel()
+        portal.title("Admin Portal")
+        portal.geometry("1280x720")
+
+        title_label = tk.Label(portal,
+            text="ADMINISTRATOR PORTAL",
+            font=("Arial", 18, "bold"))
+        title_label.pack(pady=10)
+
+        # welcome message
+        welcome_label = tk.Label(portal,
+            text=f"Welcome {user.title}, {user.first_name} {user.last_name}",
+            font=("Arial", 12))
+        welcome_label.pack(pady=5)
+
+        exit_button = tk.Button(portal,
+            text="Exit",
+            width=20,
+            command=lambda: [portal.destroy(), open_exit_window()])
+        exit_button.pack(pady=10)
+
+   
 
     # # image logo (optional)
     # try:
@@ -84,7 +123,7 @@ def GUIlogin(event=None):
         window.withdraw()
 
         # call open portal function to open the correct login window based on the returned user's role
-        open_portal(systemUser.first_name)
+        open_portal(systemUser)
 
     else:
         messagebox.showerror(
