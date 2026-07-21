@@ -27,7 +27,7 @@ def open_exit_window():
 #MODIFY LATER - this will be the main portal the user will interact with based on their role
 def open_portal(user):
 
-    if (isinstance(user, Student)):
+    if (isinstance(user, Student)):     # student logs into the system
          
         portal = tk.Toplevel()
         portal.title("Student Portal")
@@ -45,16 +45,27 @@ def open_portal(user):
             font=("Arial", 12))
         welcome_label.pack(pady=5)
 
-        exit_button = tk.Button(portal,
-            text="Exit",
-            width=20,
-            command=lambda: [portal.destroy(), open_exit_window()])
-        exit_button.pack(pady=10)
-
+        # creates course search button
         courseSearch_button = tk.Button(portal, text="Course Search", width=40, command=lambda: [portal.destroy(), GUIcourseSearch(user)])
         courseSearch_button.pack (pady=10)
+
+        # creates Add/Drop button
+        addDrop_button = tk.Button(portal, text="Add/Drop Course", width=40, command=lambda: [portal.destroy(), GUIaddDrop(user)])  # add drop function not added yet
+        addDrop_button.pack (pady=10)
+
+        # creates check conflicts button
+        checkConflicts_button = tk.Button(portal, text="Check Conflicts in Schedule", width=40, command=lambda: [portal.destroy(), GUIcheckConflicts(user)])  # check conflict function not added yet
+        checkConflicts_button.pack (pady=10)
+
+        # creates print schedule button
+        printSchedule_button = tk.Button(portal, text="Print Schedule", width=40, command=lambda: [portal.destroy(), GUIprintSchedule(user)])  # print schedule function not added yet
+        printSchedule_button.pack (pady=10)
+
+        # Exit/Logout button
+        exit_button = tk.Button(portal, text="Exit", width=20, command=lambda: [portal.destroy(), open_exit_window()])
+        exit_button.pack(pady=50)
         
-    elif (isinstance (user, Instructor)):
+    elif (isinstance (user, Instructor)):       # instructor logs into system
         portal = tk.Toplevel()
         portal.title("Instructor Portal")
         portal.geometry("1280x720")
@@ -70,12 +81,28 @@ def open_portal(user):
             font=("Arial", 12))
         welcome_label.pack(pady=5)
 
-        exit_button = tk.Button(portal,
-            text="Exit",
-            width=20,
-            command=lambda: [portal.destroy(), open_exit_window()])
-        exit_button.pack(pady=10)
-    elif (isinstance (user, Admin)):
+        # creates course search button
+        courseSearch_button = tk.Button(portal, text="Course Search", width=40, command=lambda: [portal.destroy(), GUIcourseSearch(user)])
+        courseSearch_button.pack (pady=10)
+
+        # creates print teaching schedule button
+        printTeachSchedule_button = tk.Button(portal, text="Print Teaching Schedule", width=40, command=lambda: [portal.destroy(), GUIprintTeachSchedule(user)])  # print teaching schedule function not added yet
+        printTeachSchedule_button.pack (pady=10)
+
+        # creates search student button
+        searchStudent_button = tk.Button(portal, text="Search for Student", width=40, command=lambda: [portal.destroy(), GUIsearchStudent(user)])  # search student function not created yet
+        searchStudent_button.pack (pady=10)
+
+        # creates print roster button
+        printRoster_button = tk.Button(portal, text="Print Roster", width=40, command=lambda: [portal.destroy(), GUIprintRoster(user)])  # print schedule function not added yet
+        printRoster_button.pack (pady=10)
+
+        # Exit/Logout button
+        exit_button = tk.Button(portal, text="Exit", width=20, command=lambda: [portal.destroy(), open_exit_window()])
+        exit_button.pack(pady=50)
+
+
+    elif (isinstance (user, Admin)):        # admin logs into the system
         portal = tk.Toplevel()
         portal.title("Admin Portal")
         portal.geometry("1280x720")
@@ -91,11 +118,35 @@ def open_portal(user):
             font=("Arial", 12))
         welcome_label.pack(pady=5)
 
-        exit_button = tk.Button(portal,
-            text="Exit",
-            width=20,
-            command=lambda: [portal.destroy(), open_exit_window()])
-        exit_button.pack(pady=10)
+       # creates course search button
+        courseSearch_button = tk.Button(portal, text="Course Search", width=40, command=lambda: [portal.destroy(), GUIcourseSearch(user)])
+        courseSearch_button.pack (pady=10)
+
+        # creates add/remove course to system button
+        editCourseDB_button = tk.Button(portal, text="Edit Course Database (Add/Remove Course)", width=40, command=lambda: [portal.destroy(), GUIeditCourseDB(user)])   # add/remove courses from DB function not added yet
+        editCourseDB_button.pack (pady=10)
+
+        # creates add/remove student to system button
+        editStudentDB_button = tk.Button(portal, text="Edit Student Database (Add/Remove Student)", width=40, command=lambda: [portal.destroy(), GUIeditStudentDB(user)])  # add/remove student from DB function not added yet
+        editStudentDB_button.pack (pady=10)
+
+        # creates add/remove instructor to system button
+        editInstructorDB_button = tk.Button(portal, text="Edit Instructor Database (Add/Remove Instructor)", width=40, command=lambda: [portal.destroy(), GUIeditInstructorDB(user)])  # add/remove instructor from DB function not added yet
+        editInstructorDB_button.pack (pady=10)
+
+        # creates Link/Unlink instructor to course button
+        linkUnlinkInstructor_button = tk.Button(portal, text="Link/Unlink Instructor to Course", width=40, command=lambda: [portal.destroy(), GUIlinkUnlinkInstructor(user)])  # link/unlink instructor from course function not added yet
+        linkUnlinkInstructor_button.pack (pady=10)
+
+        # creates add/remove student from course button
+        editStudentSchedule_button = tk.Button(portal, text="Add/Remove Student from Course", width=40, command=lambda: [portal.destroy(), GUIeditStudentSchedule(user)])  # add/remove course from student schedule not added yet
+        editStudentSchedule_button.pack (pady=10)
+
+        # Exit/Logout button
+        exit_button = tk.Button(portal, text="Exit", width=20, command=lambda: [portal.destroy(), open_exit_window()])
+        exit_button.pack(pady=50)
+
+     
 
    
 
