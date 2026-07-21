@@ -184,3 +184,21 @@ window.eval('tk::PlaceWindow . center')
 
 # run application
 window.mainloop()
+
+#initialize the course search window
+searchWindow = tk.Tk()
+
+searchWindow.title("Course Search")
+searchWindow.geometry("960x540")
+
+semesters = ['Fall', 'Spring', 'Summer']
+
+selectVal = tk.SttringVar(searchWindow)
+selectVal.set(semesters[0])  # default value
+
+searchParameter = tk.OptionMenu(searchWindow, selectVal, *semesters)
+searchParameter.pack(pady=10)
+
+search_button = tk.Button(searchWindow, text="Search", command=GUIcourseSearch, width= 15, font=("" , 10, "bold"))
+
+searchWindow.mainloop()

@@ -21,13 +21,14 @@ class User:
         self.wit_ID = wit_ID
         self.email = email
 
-    def course_search(self):
-        semester = input("What semester are you searching for courses in: ")
-        cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ?""", (semester,));
-        print("See All Courses Below:\n")
-        for row in cursor:
-            print(row)
-        print("\n\n")
+    def course_search(self, searchVar):
+        #semester = input("What semester are you searching for courses in: ")
+        cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ?""", (searchVar,));
+        return cursor.fetchall()
+        # print("See All Courses Below:\n")
+        # for row in cursor:
+        #     print(row)
+        # print("\n\n")
         
     def parameter_search(self):
         semester = input("What semester are you searching for courses in: ")
