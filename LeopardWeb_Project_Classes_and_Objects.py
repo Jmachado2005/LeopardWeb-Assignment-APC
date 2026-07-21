@@ -24,7 +24,8 @@ class User:
     def course_search(self, searchVar):
         #semester = input("What semester are you searching for courses in: ")
         cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ?""", (searchVar,));
-        return cursor.fetchall()
+        courses = cursor.fetchall()
+        return courses
         # print("See All Courses Below:\n")
         # for row in cursor:
         #     print(row)

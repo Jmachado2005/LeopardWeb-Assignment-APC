@@ -5,7 +5,7 @@ from tkinter import messagebox
 from tkinter.font import BOLD
 # from PTL import Image, ImageTk
 from LeopardWeb_Project_Functions import login
-from LeopardWeb_Project_Classes_and_Objects import User, Student, Instructor, Admin
+from LeopardWeb_Project_Classes_and_Objects import Course, User, Student, Instructor, Admin
 
 
 # "logout" function
@@ -50,6 +50,9 @@ def open_portal(user):
             width=20,
             command=lambda: [portal.destroy(), open_exit_window()])
         exit_button.pack(pady=10)
+
+        courseSearch_button = tk.Button(portal, text="Course Search", width=40, command=lambda: [portal.destroy(), GUIcourseSearch(user)])
+        courseSearch_button.pack (pady=10)
         
     elif (isinstance (user, Instructor)):
         portal = tk.Toplevel()
@@ -136,6 +139,43 @@ def GUIlogin(event=None):
         #puts cursor back to the beginning of password box
         password_entry.focus()
 
+def GUIcourseSearch(user):
+    def searchCourses():
+        # get the selected semester
+        selected_semester = selectVal.get()
+        print (user)  # for debugging
+        
+        courses = user.course_search(selected_semester)  # call the course_search method with the selected semester
+        
+        courseList = tk.Listbox(searchWindow, height=25, width=100, activestyle= 'dotbox', font=("Arial", 8))
+        courseList.grid(row = 2, column = 1, padx=10, pady=10, sticky='w')
+
+        entry = 1
+        for row in courses:
+            print(row)
+            courseList.insert(entry, row)
+            entry += 1
+
+    #initialize the course search window
+    searchWindow = tk.Tk()
+
+    searchWindow.title("Course Search")
+    searchWindow.geometry("960x540")
+
+    semesters = ['Fall', 'Spring', 'Summer']
+
+    selectVal = tk.StringVar(searchWindow)
+    selectVal.set(semesters[0])  # default value
+
+    searchParameter = tk.OptionMenu(searchWindow, selectVal, *semesters)
+    searchParameter.grid(row=0, column=0, padx=10, pady=10)
+    
+    search_button = tk.Button(searchWindow, text="Search", command=searchCourses, width= 15, font=("" , 10, "bold"))
+    search_button.grid(row=0, column=1, padx=10, pady=10)
+
+    searchWindow.mainloop()
+
+   
 
 # **************************** start of GUI code that runs this program ************************************* #
 
@@ -184,21 +224,3 @@ window.eval('tk::PlaceWindow . center')
 
 # run application
 window.mainloop()
-
-#initialize the course search window
-searchWindow = tk.Tk()
-
-searchWindow.title("Course Search")
-searchWindow.geometry("960x540")
-
-semesters = ['Fall', 'Spring', 'Summer']
-
-selectVal = tk.SttringVar(searchWindow)
-selectVal.set(semesters[0])  # default value
-
-searchParameter = tk.OptionMenu(searchWindow, selectVal, *semesters)
-searchParameter.pack(pady=10)
-
-search_button = tk.Button(searchWindow, text="Search", command=GUIcourseSearch, width= 15, font=("" , 10, "bold"))
-
-searchWindow.mainloop()
