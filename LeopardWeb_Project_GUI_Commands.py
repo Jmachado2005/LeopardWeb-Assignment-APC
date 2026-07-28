@@ -194,7 +194,7 @@ def GUIcourseSearch(user):
     def searchCourses():
         # get the selected semester
         selected_semester = selectVal.get()
-        print (user)  # for debugging
+        #print (user)  # for debugging
         
         courses = user.course_search(selected_semester)  # call the course_search method with the selected semester
         
@@ -203,7 +203,6 @@ def GUIcourseSearch(user):
 
         entry = 1
         for row in courses:
-            print(row)
             courseList.insert(entry, row)
             entry += 1
 
@@ -223,6 +222,9 @@ def GUIcourseSearch(user):
     
     search_button = tk.Button(searchWindow, text="Search", command=searchCourses, width= 15, font=("" , 10, "bold"))
     search_button.grid(row=0, column=1, padx=10, pady=10)
+
+    back_button = tk.Button(searchWindow, text= "Home", command= lambda: [searchWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
+    back_button.grid(row=0, column=2, padx=10, pady=10)
 
     searchWindow.mainloop()
 
