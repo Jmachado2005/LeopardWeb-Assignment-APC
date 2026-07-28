@@ -192,10 +192,12 @@ def GUIlogin(event=None):
 
 def GUIcourseSearch(user):
     def searchCourses():
-        # get the selected semester
+        # get the selected semester, dept, year, and credit values
         selected_semester = selectVal.get()
-        #print (user)  # for debugging
-        
+        selected_dept = selectDept.get()
+        selectedYear = selectYear.get()
+        credit = credit_entry.get()
+
         courses = user.course_search(selected_semester)  # call the course_search method with the selected semester
         
         courseList = tk.Listbox(searchWindow, height=25, width=100, activestyle= 'dotbox', font=("Arial", 8))
@@ -213,16 +215,44 @@ def GUIcourseSearch(user):
     searchWindow.geometry("960x540")
 
     semesters = ['Fall', 'Spring', 'Summer']
+    department = ['---', 'ARCH', 'BMED', 'CIVL', 'COMM', 'COMP', 'ELEC', 'ENGR', 'HUMN', 'MECH', 'MGMT', 'PHYS']
+    year = ['---', '2030', '2026', '2025']
 
+    credit_label = tk.Label(searchWindow, text="Credits", font=("Arial", 12))
+    credit_label.grid(row=3, column=0, padx=10, pady=0)
+    credit_entry = tk.Entry(searchWindow, width=10, font=("Arial", 12))
+    credit_entry.grid(row=4, column=0, padx=10, pady=10)
+
+    # show semester selection
     selectVal = tk.StringVar(searchWindow)
     selectVal.set(semesters[0])  # default value
 
-    searchParameter = tk.OptionMenu(searchWindow, selectVal, *semesters)
-    searchParameter.grid(row=0, column=0, padx=10, pady=10)
+    # show dept. selection
+    selectDept = tk.StringVar(searchWindow)
+    selectDept.set(department[0])  # default value
+
+    # show year selection
+    selectYear = tk.StringVar(searchWindow)
+    selectYear.set(year[0])  # default value
+
+
+    # places semester selection box
+    defaultParameter = tk.OptionMenu(searchWindow, selectVal, *semesters)
+    defaultParameter.grid(row=0, column=0, padx=10, pady=10)
+
+    # places dept. selection box
+    searchParameter1 = tk.OptionMenu(searchWindow, selectDept, *department)
+    searchParameter1.grid(row=1, column=0, padx=10, pady=10)
+
+    # places year selection box
+    searchParameter2 = tk.OptionMenu(searchWindow, selectYear, *year)
+    searchParameter2.grid(row=2, column=0, padx=10, pady=10)
     
+    # places search button
     search_button = tk.Button(searchWindow, text="Search", command=searchCourses, width= 15, font=("" , 10, "bold"))
     search_button.grid(row=0, column=1, padx=10, pady=10)
-
+    
+    # back button
     back_button = tk.Button(searchWindow, text= "Home", command= lambda: [searchWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
     back_button.grid(row=0, column=2, padx=10, pady=10)
 
