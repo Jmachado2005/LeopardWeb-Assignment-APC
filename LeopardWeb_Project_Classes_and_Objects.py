@@ -238,11 +238,12 @@ class Instructor(User):
         self.department = department
 
     def print_teaching_schedule(self):      # Prints out what classes the logged in professor is teaching.
-        print("Your Teaching Schedule:\n")
         cursor.execute("""SELECT * FROM COURSES WHERE INSTRUCTOR_ID = ?""", (str(self.wit_ID),),); # Queries the database for the classes to print
-        for row in cursor:      # Prints each entry contained in the cursor to the UI
-            print(row)
-        print("\n")
+        courses = cursor.fetchall()
+        return courses
+        #for row in cursor:      # Prints each entry contained in the cursor to the UI
+            #print(row)
+        #print("\n")
 
     def search_student(self):
         print("\nYour Courses:")

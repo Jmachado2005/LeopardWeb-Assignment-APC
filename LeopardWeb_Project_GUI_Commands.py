@@ -261,6 +261,29 @@ def GUIcourseSearch(user):
 
     searchWindow.mainloop()
 
+def GUIprintTeachSchedule(user):
+    scheduleWindow = tk.Tk()
+
+    scheduleWindow.title("Teaching Schedule")
+    scheduleWindow.geometry("960x540")
+
+    scheduleLabel = tk.Label(scheduleWindow, text="Teaching Schedule", font=("Arial", 12, "bold"))
+    scheduleLabel.place(relx=0.26, rely=0.13, anchor=tk.CENTER)
+
+    schedule = tk.Listbox(scheduleWindow, height = 25, width = 100, activestyle= 'dotbox', font=("Arial", 8))
+    schedule.place(relx = 0.5, rely = 0.5, anchor = tk.CENTER)
+
+    back_button = tk.Button(scheduleWindow, text= "Home", command= lambda: [scheduleWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
+    back_button.place(relx=0.9, rely=0.08, anchor=tk.CENTER)
+
+    courseSchedule = user.print_teaching_schedule()
+
+    entry = 1
+    for row in courseSchedule:
+        schedule.insert(entry, row)
+        entry += 1
+
+    scheduleWindow.mainloop()
    
 
 # **************************** start of GUI code that runs this program ************************************* #
