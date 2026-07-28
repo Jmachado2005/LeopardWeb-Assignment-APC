@@ -1,7 +1,7 @@
 # commands for the GUI
 
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import SE, messagebox
 from tkinter.font import BOLD
 # from PTL import Image, ImageTk
 from LeopardWeb_Project_Functions import login
@@ -198,10 +198,13 @@ def GUIcourseSearch(user):
         selectedYear = selectYear.get()
         credit = credit_entry.get()
 
-        courses = user.course_search(selected_semester)  # call the course_search method with the selected semester
+        if selected_dept == '---' and selectedYear == '---' and credit == '':
+            courses = user.course_search(selected_semester)  # call the course_search method with the selected semester
+        else:
+            courses = user.parameter_search(selected_semester, selected_dept, selectedYear, credit)  # call the parameter_search method with the selected parameters
         
         courseList = tk.Listbox(searchWindow, height=25, width=100, activestyle= 'dotbox', font=("Arial", 8))
-        courseList.grid(row = 2, column = 1, padx=10, pady=10, sticky='w')
+        courseList.grid(row = 2, column = 2, padx=10, pady=10, sticky='w')
 
         entry = 1
         for row in courses:
