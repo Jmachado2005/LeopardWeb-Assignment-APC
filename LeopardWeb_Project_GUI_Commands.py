@@ -53,13 +53,13 @@ def open_portal(user):
         addDrop_button = tk.Button(portal, text="Add/Drop Course", width=40, command=lambda: [portal.destroy(), GUIaddDrop(user)])  # add drop function not added yet
         addDrop_button.pack (pady=10)
 
-        # creates check conflicts button
-        checkConflicts_button = tk.Button(portal, text="Check Conflicts in Schedule", width=40, command=lambda: [portal.destroy(), GUIcheckConflicts(user)])  # check conflict function not added yet
-        checkConflicts_button.pack (pady=10)
-
         # creates print schedule button
-        printSchedule_button = tk.Button(portal, text="Print Schedule", width=40, command=lambda: [portal.destroy(), GUIprintSchedule(user)])  # print schedule function not added yet
+        printSchedule_button = tk.Button(portal, text="Print Schedule", width=40, command=lambda: [portal.destroy(), GUIprintSchedule(user)])
         printSchedule_button.pack (pady=10)
+
+        # creates check conflicts button
+        checkConflicts_button = tk.Button(portal, text="Check Conflicts in Schedule", width=40, command=lambda: [portal.destroy(), GUIcheckConflicts(user)])
+        checkConflicts_button.pack (pady=10)
 
         # Exit/Logout button
         exit_button = tk.Button(portal, text="Exit", width=20, command=lambda: [portal.destroy(), open_exit_window()])
@@ -258,7 +258,148 @@ def GUIcourseSearch(user):
 
     searchWindow.mainloop()
 
-   
+ # *** Joe's Work Starts here ***
+
+def GUIaddDrop(user):
+    def addDrop():
+        choice = showOption.get()
+        crnNum = CRN_entry.get()
+
+        confirmation = user.addDrop_course(choice, crnNum, user.wit_ID)
+
+        print(f"Add/Drop ran successfully! Value: {confirmation}")
+
+        # prints the appropriate message to the bottom part of the window based on what was returned from add drop methood
+        if (confirmation == 0):     # ADD: no course w/ entered CRN exists in system
+            addDropMsg = tk.Message(addDropWindow, text="Course does not exist in database. Please try again", font=("Arial", 12))
+            addDropMsg.grid(row=2, column=0, padx=10, pady=0)
+        elif (confirmation == 1):   # ADD: course was added to schedule
+            addDropMsg = tk.Message(addDropWindow, text="Course has been added to your schedule!", font=("Arial", 12))
+            addDropMsg.grid(row=2, column=0, padx=10, pady=0)
+        elif (confirmation == 2):   # ADD: max amt off courses in student schedule
+            addDropMsg = tk.Message(addDropWindow, text="Maximum amount of courses reached! You cannot add any more to your schedule", font=("Arial", 12))
+            addDropMsg.grid(row=2, column=0, padx=10, pady=0)
+        elif (confirmation == 3):   # DROP: 
+            addDropMsg = tk.Message(addDropWindow, text="This course is not in your schedule. Try Again", font=("Arial", 12))
+            addDropMsg.grid(row=2, column=0, padx=10, pady=0)
+        elif (confirmation == 4):
+            addDropMsg = tk.Message(addDropWindow, text="Course has been removed from your schedule!", font=("Arial", 12))
+            addDropMsg.grid(row=2, column=0, padx=10, pady=0)
+
+    #initialize the add/drop window
+    addDropWindow = tk.Tk()
+
+    addDropWindow.title("Add/Drop")
+    addDropWindow.geometry("720x480")
+
+    option = ['Select Option Here', 'Add', 'Drop']
+
+    # creates a label for the option
+    option_label = tk.Label(addDropWindow, text="Selection:", font=("Arial", 12))
+    option_label.grid(row=0, column=0, padx=10, pady=10)
+
+    # puts in add/drop options inside menu + shows the dropdown menu
+    showOption = tk.StringVar(addDropWindow)
+    showOption.set(option[0])  # default value
+    addDropSelection = tk.OptionMenu(addDropWindow, showOption, *option)
+    addDropSelection.grid(row=1, column=0, padx=10, pady=0)
+
+
+    # creates a label for CRN entry
+    CRN_label = tk.Label(addDropWindow, text="CRN Entry", font=("Arial", 12))
+    CRN_label.grid(row=0, column=1, padx=10, pady=10)
+  
+    # puts in text entry for CRN entry
+    CRN_entry = tk.Entry(addDropWindow, width=10, font=("Arial", 12))
+    CRN_entry.grid(row=1, column=1, padx=10, pady=10)
+
+
+    # creates a label for confirm button
+    confirm_label = tk.Label(addDropWindow, text="Confirm?", font=("Arial", 12))
+    confirm_label.grid(row=0, column=2, padx=10, pady=10)
+    
+
+    # creates button to confirm that user wants to add/drop course
+    confirm_button = tk.Button(addDropWindow, text="Yes, Confirm", command=addDrop, width= 15, font=("" , 10))
+    confirm_button.grid(row=1, column=2, padx=10, pady=10)
+
+
+    # home button to go back to main portal
+    back_button = tk.Button(addDropWindow, text= "Home", command= lambda: [addDropWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
+    back_button.grid(row=1, column=3, padx=10, pady=10)
+
+    addDropWindow.mainloop() 
+
+def GUIprintSchedule(user):
+    def printStudentSchedule():
+        schedule = user.print_schedule(user.first_name)      # call the print schedule method
+
+        studentSchedule = tk.Listbox(printSchWindow, height=25, width=100, activestyle= 'dotbox', font=("Arial", 8))
+        studentSchedule.grid(row = 1, column = 0, padx=10, pady=10, sticky='s')
+
+        entry = 1
+        for row in schedule:
+            studentSchedule.insert(entry, row)
+            entry += 1
+
+    #initialize the check window
+    printSchWindow = tk.Tk()
+
+    printSchWindow.title("Print Schedule")
+    printSchWindow.geometry("960x540")
+
+    # creates a label to show the student's schedule
+    schedule_label = tk.Label(printSchWindow, text="Your Schedule:", font=("Arial", 14))
+    schedule_label.grid(row=0, column=0, padx=10, pady=10)
+
+    # calls printStudentSchedule function to show student their schedule
+    printStudentSchedule()
+
+    # home button to go back to main portal
+    back_button = tk.Button(printSchWindow, text= "Home", command= lambda: [printSchWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
+    back_button.grid(row=0, column=2, padx=10, pady=10)
+
+def GUIcheckConflicts(user):
+    def checkConflicts():
+        schedule = user.print_schedule(user.first_name)      # calls the print schedule method (like before)
+
+        studentSchedule = tk.Listbox(checkConfWindow, height=25, width=100, activestyle= 'dotbox', font=("Arial", 8))
+        studentSchedule.grid(row = 1, column = 0, padx=10, pady=10, sticky='s')
+
+        entry = 1
+        for row in schedule:
+            studentSchedule.insert(entry, row)
+            entry += 1
+
+        # code to show if conflicts detected are here
+        duplicateDetect = user.check_conflicts(user.wit_ID)
+
+        # DEBUGGING: print(f"sucessfully checked for dupes. Value: {duplicateDetect}")
+
+        if (duplicateDetect == 1):  # duplicate detected
+            duplicateMsg = tk.Message(checkConfWindow, text="ATTENTION: Student has duplicate courses in their schedule!", font=("Arial", 12))
+            duplicateMsg.grid(row=3, column=0, padx=10, pady=0)
+        elif (duplicateDetect == 0):
+            duplicateMsg = tk.Message(checkConfWindow, text="No Duplicates Found In Schedule!", font=("Arial", 12))
+            duplicateMsg.grid(row=3, column=0, padx=10, pady=10)
+
+    #initialize the check window
+    checkConfWindow = tk.Tk()
+
+    checkConfWindow.title("Check Conflicts")
+    checkConfWindow.geometry("960x540")
+
+    # creates a label to show the student's schedule
+    schedule_label = tk.Label(checkConfWindow, text="Your Schedule:", font=("Arial", 14))
+    schedule_label.grid(row=0, column=0, padx=10, pady=10)
+
+    # calls printStudentSchedule function to show student their schedule
+    checkConflicts()
+
+    # home button to go back to main portal
+    back_button = tk.Button(checkConfWindow, text= "Home", command= lambda: [checkConfWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
+    back_button.grid(row=0, column=2, padx=10, pady=10)
+
 
 # **************************** start of GUI code that runs this program ************************************* #
 
