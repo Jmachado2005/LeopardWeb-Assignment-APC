@@ -31,42 +31,24 @@ class User:
         #     print(row)
         # print("\n\n")
         
-    def parameter_search(self):
-        semester = input("What semester are you searching for courses in: ")
-        additional_search = input("Do you want to search with an additional parameter? (Yes/No) ")
-        if additional_search == "Yes":
-            print("Year")
-            print("Department")
-            print("Credits")
-            parameter_two = input("Choose One: ")
-            parameter_value = input("Enter a value/department: ")
-            if parameter_two == "Year":
-                cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND YEAR = ?""", (semester, parameter_value));
-                print(f"Showing you classes for year: {parameter_value}\n")
-                print("CRN | TITLE | DEPARTMENT | TIMES | DAYS OF THE WEEK | INSTRUCTOR | SEMESTER | YEAR | CREDITS")
-                for row in cursor:
-                    print(row)
-                print("\n\n")
-            elif parameter_two == "Department":
-                cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND DEPARTMENT = ?""", (semester, parameter_value));
-                print(f"Showing you classes for department: {parameter_value}\n")
-                print("CRN | TITLE | DEPARTMENT | TIMES | DAYS OF THE WEEK | INSTRUCTOR | SEMESTER | YEAR | CREDITS")
-                for row in cursor:
-                    print(row)
-                print("\n\n")
-            elif parameter_two == "Credits":
-                cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND CREDITS = ?""", (semester, parameter_value));
-                print(f"Showing you classes with: {parameter_value} Credits\n")
-                print("CRN | TITLE | DEPARTMENT | TIMES | DAYS OF THE WEEK | INSTRUCTOR | SEMESTER | YEAR | CREDITS")
-                for row in cursor:
-                    print(row)
-                print("\n\n")
+    def parameter_search(self, semester, dept, year, credit):
+        if (dept == "---" and year == "---"):
+            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND CREDITS = ?""", (semester, credit));
+        elif (dept == "---" and credit == ""):
+            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND YEAR = ?""", (semester, year));
+        elif (year == "---" and credit == ""):
+             cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND DEPARTMENT = ?""", (semester, dept));
+        elif (dept == "---"):
+            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND YEAR = ? AND CREDITS = ?""", (semester, year, credit));
+        elif (year == "---"):
+            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND DEPARTMENT = ? AND CREDITS = ?""", (semester, dept, credit));
+        elif (credit == ""):
+            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND DEPARTMENT = ? AND YEAR = ?""", (semester, dept, year));
         else:
-            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ?""", (semester,));
-            print("CRN | TITLE | DEPARTMENT | TIMES | DAYS OF THE WEEK | INSTRUCTOR | SEMESTER | YEAR | CREDITS")
-            for row in cursor:
-                print(row)
-            print("\n\n")
+            cursor.execute("""SELECT * FROM COURSES WHERE SEMESTER = ? AND DEPARTMENT = ? AND YEAR = ? AND CREDITS = ?""", (semester, dept, year, credit));
+
+        courses = cursor.fetchall()
+        return courses
 
 class Student(User):
     def __init__(self, wit_ID, first_name, last_name, grad_year, major, email):
