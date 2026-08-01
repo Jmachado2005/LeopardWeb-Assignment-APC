@@ -1,12 +1,15 @@
 # commands for the GUI
 
 import tkinter as tk
+import sqlite3
 from tkinter import messagebox
 from tkinter.font import BOLD
 # from PTL import Image, ImageTk
 from LeopardWeb_Project_Functions import login
 from LeopardWeb_Project_Classes_and_Objects import Course, User, Student, Instructor, Admin
 
+conn = sqlite3.connect("LeopardWeb_Project.db")
+cursor = conn.cursor()
 
 # "logout" function
 def open_exit_window():
@@ -24,7 +27,6 @@ def open_exit_window():
     btn = tk.Button(exit_win, text="Close", command=exit_win.destroy)
     btn.pack()
 
-#MODIFY LATER - this will be the main portal the user will interact with based on their role
 def open_portal(user):
 
     if (isinstance(user, Student)):     # student logs into the system
@@ -146,25 +148,6 @@ def open_portal(user):
         exit_button = tk.Button(portal, text="Exit", width=20, command=lambda: [portal.destroy(), open_exit_window()])
         exit_button.pack(pady=50)
 
-     
-
-   
-
-    # # image logo (optional)
-    # try:
-    #     image = Image.open("logo.png")
-    #     image = image.resize((30, 30))  # small logo size
-    #     logo = ImageTk.PhotoImage(image)
-
-    #     # place in top-left corner
-    #     logo_label = tk.Label(portal, image=logo)
-    #     logo_label.place(x=5, y=5)
-
-    #     # prevent garbage collection
-    #     portal.logo = logo
-    # except:
-    #     pass
-
 def GUIlogin(event=None):
     # get username and PW from user
     username = username_entry.get()
@@ -189,6 +172,74 @@ def GUIlogin(event=None):
 
         #puts cursor back to the beginning of password box
         password_entry.focus()
+
+def GUIforgotPW():
+    def show_password(username):
+        if (username is None or username == ""):
+            messagebox.showerror("Error", "Please enter a username.")
+            return
+        else:
+            # gets the password for the given username and displays it in a messagebox
+            cursor.execute("""SELECT PASSWORD FROM LOGIN WHERE USERNAME = ?""", (username,))
+            password = cursor.fetchone()
+
+            messagebox.showinfo("Current Password", f"The password for {username} is: {password}")
+
+    def reset_password(username):
+        if username is None or username == "":
+            messagebox.showerror("Error", "Please enter a username.")
+            return
+        else: 
+            # gets the new password from the user and updates it in the database
+            new_password = tk.simpledialog.askstring("Reset Password", "Enter your new password:")
+            cursor.execute("""UPDATE LOGIN SET PASSWORD = ? WHERE USERNAME = ?""", (new_password, username))
+            conn.commit()
+            messagebox.showinfo("Password Reset", f"The password for {username} has been reset to {new_password}.")
+
+    forgotPWWindow = tk.Toplevel()
+    forgotPWWindow.title("Forgot Password")
+    forgotPWWindow.geometry("600x400")
+
+    # creates a label for the username entry
+    username_label = tk.Label(forgotPWWindow, text="Enter your username:", font=("Arial", 12))
+    username_label.pack(pady=10)
+
+    # create an entry for the username
+    username_entry = tk.Entry(forgotPWWindow, width=30, font=("Arial", 12))
+    username_entry.pack(pady=10)
+
+    # creates a button to show the user their password
+    showPW_button = tk.Button(forgotPWWindow, text="Show Current Password", command=lambda: show_password(username_entry.get()), width=30, font=("", 10, "bold"))
+    showPW_button.pack(pady=10)
+
+    # create a button to reset the password
+    submit_button = tk.Button(forgotPWWindow, text="Reset Password", command=lambda: reset_password(username_entry.get()), width=30, font=("", 10, "bold"))
+    submit_button.pack(pady=10)
+
+    # creates a button to go back to login screen
+    return_button = tk.Button(forgotPWWindow, text="Return to Login", command=forgotPWWindow.destroy, width=20, font=("", 10))
+    return_button.pack(pady=30)
+
+    forgotPWWindow.mainloop()
+
+def GUIabout():
+    aboutWindow = tk.Toplevel()
+    aboutWindow.title("About Project")
+    aboutWindow.geometry("500x300")
+
+    # create a label for the about information
+    about_label = tk.Label(aboutWindow, text="LeopardWeb - Course Registration System", font=("Arial", 14, "bold"))
+    about_label.pack(pady=10)
+
+    # create a label for group members
+    members_label = tk.Label(aboutWindow, text="Project By: Harrison Brown, Joe Machado, & David Vozzo", font=("Arial", 12))
+    members_label.pack(pady=10)
+
+    # create a button to go back to login screen
+    return_button = tk.Button(aboutWindow, text="Return to Login", command=aboutWindow.destroy, width=20, font=("", 10))
+    return_button.pack(pady=10)
+
+    aboutWindow.mainloop()
 
 def GUIcourseSearch(user):
     def searchCourses():
@@ -425,17 +476,24 @@ password_label = tk.Label(window, text="Password:", font=("Arial", 12))
 password_label.grid(row=1, column=0, padx=50, pady=10, sticky="e")
 
 #creating text entry for password box
-password_entry = tk.Entry(window, width=30, font=("Arial", 12))
+password_entry = tk.Entry(window, width=30, font=("Arial", 12), show="*")
 password_entry.grid(row=1, column=1, padx=0, pady=10)
-
-# FOR LATER: note you might want to show the password while you are debugging then add in the show="*"
-# once you are satisfied it is working
 
 #creating login button
 login_button = tk.Button(window, text="Login", command=GUIlogin, width= 15, font=("" , 10, "bold"))
-
-#login_button.grid(row=2, column=0, columnspan=2, pady=15)
 login_button.place(relx=0.5, rely=0.28, anchor=tk.CENTER)
+
+# creating the "Forgot Password?" button
+forgotPW_button = tk.Button(window, text="Forgot Password/Reset Password", command=GUIforgotPW, width= 30, font=("Arial", 10, "bold"))
+forgotPW_button.place(relx=0.5, rely=0.38, anchor=tk.CENTER)
+
+# creating a "Help" button
+help_button = tk.Button(window, text = "Help", command=lambda: messagebox.showinfo("Help", "Please refer to the user manual for instructions on how to use this program."), width= 15, font=("Arial", 10, "bold"))
+help_button.place(relx=0.5, rely=0.48, anchor=tk.CENTER)
+
+# creating the "About" button
+about_button = tk.Button(window, text="About", command=GUIabout, width= 10, font=("Arial", 10, "bold"))
+about_button.place(relx=0.5, rely=0.80, anchor=tk.CENTER)
 
 # pressing Enter calls login(). Without this you will always need to click the Login button
 window.bind("<Return>", GUIlogin)
