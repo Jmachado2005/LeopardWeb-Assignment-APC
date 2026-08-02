@@ -284,6 +284,91 @@ def GUIprintTeachSchedule(user):
         entry += 1
 
     scheduleWindow.mainloop()
+    
+def GUIsearchStudent(user):
+
+    def studentSearch():
+        CRN = selectVal.get()
+        ID = studentID.get()
+        studentInfo = user.search_student(ID, CRN)
+        searchMessage.delete(0, tk.END)  # Clear the listbox before inserting new data
+        if studentInfo is not None:
+            searchMessage.insert(1, "Student Found to be Enrolled in This Course.")
+        else:
+            searchMessage.insert(1, "Student Not Found to be Enrolled in This Course.")
+    searchStudentWindow = tk.Tk()
+
+    searchStudentWindow.title("Student Search")
+    searchStudentWindow.geometry("960x540")
+
+    rosterLabel = tk.Label(searchStudentWindow, text="Confirmation Message", font=("Arial", 12, "bold"))
+    rosterLabel.place(relx=0.26, rely=0.13, anchor=tk.CENTER)
+
+    searchMessage = tk.Listbox(searchStudentWindow, height = 15, width = 75, activestyle= 'dotbox', font=("Arial", 8))
+    searchMessage.place(relx = 0.4, rely = 0.37, anchor = tk.CENTER)
+
+    back_button = tk.Button(searchStudentWindow, text= "Home", command= lambda: [searchStudentWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
+    back_button.place(relx=0.9, rely=0.08, anchor=tk.CENTER)
+
+    courseCRNs = []
+    selectVal = tk.StringVar(searchStudentWindow)
+
+    courses = user.print_teaching_schedule()
+    for course in courses:
+        courseCRNs.append(course[0])
+
+    courseSelection = tk.OptionMenu(searchStudentWindow, selectVal, *courseCRNs)
+    courseSelection.grid(row=0, column=0, padx=10, pady=10)
+
+    idLabel = tk.Label(searchStudentWindow, text="Student ID:", font=("Arial", 12))
+    idLabel.grid(row=0, column=1, padx=5, pady=10)
+
+    studentID = tk.Entry(searchStudentWindow, width=15, font=("Arial", 12))
+    studentID.grid(row=0, column=2, padx=10, pady=10)
+
+    search_button = tk.Button(searchStudentWindow, text="Search", command=studentSearch, width= 15, font=("" , 10, "bold"))
+    search_button.grid(row=0, column=3, padx=10, pady=10)
+
+    searchStudentWindow.mainloop()
+
+def GUIprintRoster(user):
+    def getRoster():
+        CRN = selectVal.get()
+        courseRoster = user.print_roster(CRN)
+        roster.delete(0, tk.END)  # Clear the listbox before inserting new data
+        entry = 1
+        for row in courseRoster:
+            roster.insert(entry, row)
+            entry += 1
+
+    printRosterWindow = tk.Tk()
+
+    printRosterWindow.title("Course Rosters")
+    printRosterWindow.geometry("960x540")
+
+    rosterLabel = tk.Label(printRosterWindow, text="Course Roster", font=("Arial", 12, "bold"))
+    rosterLabel.place(relx=0.26, rely=0.13, anchor=tk.CENTER)
+
+    roster = tk.Listbox(printRosterWindow, height = 25, width = 100, activestyle= 'dotbox', font=("Arial", 8))
+    roster.place(relx = 0.5, rely = 0.5, anchor = tk.CENTER)
+
+    back_button = tk.Button(printRosterWindow, text= "Home", command= lambda: [printRosterWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
+    back_button.place(relx=0.9, rely=0.08, anchor=tk.CENTER)
+
+    courseCRNs = []
+    selectVal = tk.StringVar(printRosterWindow)
+
+    courses = user.print_teaching_schedule()
+    for course in courses:
+        courseCRNs.append(course[0])
+
+    courseSelection = tk.OptionMenu(printRosterWindow, selectVal, *courseCRNs)
+    courseSelection.grid(row=0, column=0, padx=10, pady=10)
+
+    search_button = tk.Button(printRosterWindow, text="Print", command=getRoster, width= 15, font=("" , 10, "bold"))
+    search_button.grid(row=0, column=1, padx=10, pady=10)
+
+    printRosterWindow.mainloop()
    
 
 # **************************** start of GUI code that runs this program ************************************* #
