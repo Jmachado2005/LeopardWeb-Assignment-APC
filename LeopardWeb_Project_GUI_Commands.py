@@ -52,7 +52,7 @@ def open_portal(user):
         courseSearch_button.pack (pady=10)
 
         # creates Add/Drop button
-        addDrop_button = tk.Button(portal, text="Add/Drop Course", width=40, command=lambda: [portal.destroy(), GUIaddDrop(user)])  # add drop function not added yet
+        addDrop_button = tk.Button(portal, text="Add/Drop Course", width=40, command=lambda: [portal.destroy(), GUIaddDrop(user)])
         addDrop_button.pack (pady=10)
 
         # creates print schedule button
@@ -411,6 +411,8 @@ def GUIprintSchedule(user):
     # home button to go back to main portal
     back_button = tk.Button(printSchWindow, text= "Home", command= lambda: [printSchWindow.destroy(), open_portal(user)], width= 15, font=("" , 10, "bold"))
     back_button.grid(row=0, column=2, padx=10, pady=10)
+
+    printSchWindow.mainloop()
 
 def GUIcheckConflicts(user):
     def checkConflicts():
