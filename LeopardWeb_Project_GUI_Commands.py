@@ -625,13 +625,21 @@ def GUIeditCourseDB(user):      # edit courses database
 
     def createCourse(time, CRN, title, dep, DoW, semester, year, credit):
      
-
+        cursor.execute("""SELECT * FROM COURSES WHERE CRN = ?;""", (CRN,),)
+        check = cursor.fetchone()
         if (time == "" or CRN == "" or title == "" or dep == "" or DoW == "" or semester == "" or year == "" or credit == ""):
             win = tk.Toplevel()
             win.title("Error")
             win.geometry("600x300")
 
             error = tk.Label(win, text = "Error creating course. One or more data entries empty")
+            error.pack()
+        elif(check != None):
+            win = tk.Toplevel()
+            win.title("Error")
+            win.geometry("600x300")
+
+            error = tk.Label(win, text = "CRN already exists")
             error.pack()
         else:
             win = tk.Toplevel()
@@ -1138,8 +1146,6 @@ def GUIeditStudentSchedule(user):   # edit student schedule
         lNameTitle.pack(pady = 10)
         CRN.pack(pady = 10)
         
-        studentID = studentID.get()
-        CRN = CRN.get()
 
         def removeStudent(studentID, CRN):
             # Checks to make sure the student exists and is enrolled in the selected course then removes them from it
@@ -1176,8 +1182,7 @@ def GUIeditStudentSchedule(user):   # edit student schedule
             wWin.geometry("1200x800")
             error = tk.Label(wWin, text = "Student is not enrolled in that course.")
             error.pack()
-        btn = tk.Button(Win, text = "Submit Data", command = lambda: [removeStudent(studentID, CRN)])
-        btn.pack()
+        btn = tk.Button(Win, text = "Submit Data", command = lambda: [removeStudent(studentID.get(), CRN.get())])
 
     btn1 = tk.Button(nWin, text = "Add Student to Course", command = add_student_course)
     btn1.pack(pady = 10)
